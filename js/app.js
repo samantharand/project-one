@@ -28,8 +28,16 @@ const game = {
 		yCord: 560,
 		direction: null,
 	},
+	// smoother movement? -- why wont it work with "this"
+	animate: function() {
+		game.moveSquare()
+		game.clearCanvas()
+		game.drawSquare()
+		window.requestAnimationFrame(game.animate)
+	},
+	// starts the game
 	drawLevel: function() {
-		this.drawSquare()
+		this.animate()
 	},
 
 // puts player piece on the canvas
@@ -46,9 +54,14 @@ const game = {
 
 		}
 	},
-
+	// clears the whole canvas - used to prevent trailing
 	clearCanvas: function() {
 		this.ctx.clearRect(0, 0, 600, 600)
+	},
+
+	// set player square animation
+	setDirection: function() {
+	
 	},
 
 	moveSquare: function(direction) {
@@ -60,11 +73,10 @@ const game = {
 			this.playerSquare.yCord -= 5;
 		}
 		//this.ctx.clearRect(this.playerSquare.xCord, this.playerSquare.yCord, 40, 40)
-		this.clearCanvas()
-		this.drawSquare()
+		//this.clearCanvas()
+		//this.drawSquare()
 	},
 }
-
 game.drawLevel()
 
 //event listners below
