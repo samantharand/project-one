@@ -16,6 +16,7 @@ const game = {
 	score: 0,
 	level: 1,
 	timer: null,
+	gravity: 0.3,
 	canvas: {
 		height: 600,
 		width: 600,
@@ -24,13 +25,17 @@ const game = {
 		strokeColor: "black",
 		height: 40,
 		width: 40,
-		xCord: 100,
+		xCord: 40,
 		yCord: 560,
+		speed: 5,
+		velX: 0,
+		velY:0,
 		direction: null,
+		jumping: false,
 	},
 	// smoother movement? -- why wont it work with "this"
 	animate: function() {
-		game.moveSquare()
+		game.moveSquare(game.playerSquare.direction)
 		game.clearCanvas()
 		game.drawSquare()
 		window.requestAnimationFrame(game.animate)
@@ -38,6 +43,7 @@ const game = {
 	// starts the game
 	drawLevel: function() {
 		this.animate()
+		//this.playerSquare.yCord += this.gravity
 	},
 
 // puts player piece on the canvas
@@ -73,16 +79,21 @@ const game = {
 	},
 
 	moveSquare: function(direction) {
-		if(this.playerSquare.direction === "left" && this.playerSquare.xCord - this.playerSquare.width > -40) {
-			this.playerSquare.xCord -= 5;
-		} else if (this.playerSquare.direction === "right" && this.playerSquare.xCord + this.playerSquare.width < this.canvas.width) {
-			this.playerSquare.xCord += 5;
-		} else if (this.playerSquare.direction === "up" && this.playerSquare.yCord - this.playerSquare.height > -40) {
-			this.playerSquare.yCord -= 5;
+		if(direction === "left" && this.playerSquare.xCord - this.playerSquare.width > -40) {
+			this.playerSquare.xCord -= this.playerSquare.speed;
+		} else if (direction === "right" && this.playerSquare.xCord + this.playerSquare.width < this.canvas.width) {
+			this.playerSquare.xCord += this.playerSquare.speed;
+		} else if (direction === "up" && this.playerSquare.yCord - this.playerSquare.height > -40) {
+			if(this.playerSquare.jumping === false) {
+				this.playerSquare.jumping = true
+				this.playerSquare.yCord = -this.playerSquare.speed*2
+			}
 		}
-		//this.ctx.clearRect(this.playerSquare.xCord, this.playerSquare.yCord, 40, 40)
-		//this.clearCanvas()
-		//this.drawSquare()
+
+		if(this.playerSquare.yCord >= this.canvas.height - this.playerSquare.height) {
+			this.playerSquare.yCord = this.canvas.height - this.playerSquare.height
+			this.playerSquare.jumping = false
+		}
 	},
 }
 
