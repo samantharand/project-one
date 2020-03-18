@@ -26,6 +26,7 @@ const game = {
 		width: 40,
 		xCord: 100,
 		yCord: 560,
+		direction: null,
 	},
 	drawLevel: function() {
 		this.drawSquare()
@@ -46,6 +47,10 @@ const game = {
 		}
 	},
 
+	clearCanvas: function() {
+		this.ctx.clearRect(0, 0, 600, 600)
+	},
+
 	moveSquare: function(direction) {
 		if(direction === "left" && this.playerSquare.xCord - this.playerSquare.width > -40) {
 			this.playerSquare.xCord -= 5;
@@ -55,7 +60,7 @@ const game = {
 			this.playerSquare.yCord -= 5;
 		}
 		//this.ctx.clearRect(this.playerSquare.xCord, this.playerSquare.yCord, 40, 40)
-		this.ctx.clearRect(0, 0, 600, 600)
+		this.clearCanvas()
 		this.drawSquare()
 	},
 }
