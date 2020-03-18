@@ -67,6 +67,8 @@ const game = {
 			this.playerSquare.direction = 'right'
 		} else if(keyCode === 38) {
 			this.playerSquare.direction = 'up'
+		} else {
+			this.playerSquare.direction = null
 		}
 	},
 
@@ -103,6 +105,9 @@ body.addEventListener('keydown', (event) => {
 	}
 });
 
+body.addEventListener("keyup", () => {
+	game.setDirection(null)
+})
 
 
 
