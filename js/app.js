@@ -2,15 +2,21 @@ console.log("Hello Project One");
 
 const ctx = document.querySelector('#game-canvas').getContext('2d')
 
-class Bricks {
-	constructor() {
-
+class Brick {
+	constructor(xCord, yCord) {
+		this.xCord = xCord
+		this.yCord = yCord
+		this.height = 40
+		this.width = 40
 	}
 
 	draw() {
+		ctx.fillStyle = 'black'
+		ctx.fillRect(this.xCord, this.yCord, this.width, this.height)
 
 	}
 }
+const b = new Brick(560, 560)
 
 class Obstacle {
 	constructor() {
@@ -32,6 +38,7 @@ const game = {
 		height: 600,
 		width: 600,
 	},
+	bricks:[],
 	playerSquare: {
 		strokeColor: "black",
 		height: 40,
@@ -49,6 +56,7 @@ const game = {
 		game.moveSquare(game.playerSquare.direction)
 		game.clearCanvas()
 		game.drawSquare()
+		b.draw()
 		window.requestAnimationFrame(game.animate)
 	},
 	// starts game on board
@@ -61,8 +69,8 @@ const game = {
 		if(this.level === 1) {
 			ctx.fillStyle = 'rgb(255, 0, 0 , 0.5)'
 			ctx.strokeStyle = this.playerSquare.strokeColor
-			ctx.lineWidth = 2
 			ctx.fillRect(this.playerSquare.xCord, this.playerSquare.yCord, this.playerSquare.height, this.playerSquare.width)
+			//ctx.lineWidth = 2
 			//ctx.rect(this.playerSquare.xCord, this.playerSquare.yCord, this.playerSquare.height, this.playerSquare.width)
 			//ctx.fill()
 			//ctx.stroke()
