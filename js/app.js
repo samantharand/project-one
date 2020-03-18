@@ -1,17 +1,28 @@
 console.log("Hello Project One");
 
-// class Square {
-// 	constructor(color, x, y) {
-// 		this.color = color
-// 		this.x = x
-// 		this.y = y
-// 		this.height = 100
-// 		this.width = 100
-// 	}
-// }
+const ctx = document.querySelector('#game-canvas').getContext('2d')
+
+class Bricks {
+	constructor() {
+
+	}
+
+	draw() {
+
+	}
+}
+
+class Obstacle {
+	constructor() {
+
+	}
+
+	draw() {
+
+	}
+}
 
 const game = {
-	ctx: document.querySelector('#game-canvas').getContext('2d'),
 	lives: 3,
 	score: 0,
 	level: 1,
@@ -40,29 +51,28 @@ const game = {
 		game.drawSquare()
 		window.requestAnimationFrame(game.animate)
 	},
-	// starts the game
+	// starts game on board
 	drawLevel: function() {
 		this.animate()
-		//this.playerSquare.yCord += this.gravity
 	},
 
 // puts player piece on the canvas
 	drawSquare: function() {
 		if(this.level === 1) {
-			this.ctx.fillStyle = 'rgb(255, 0, 0 , 0.5)'
-			this.ctx.strokeStyle = this.playerSquare.strokeColor
-			this.ctx.lineWidth = 2
-			this.ctx.fillRect(this.playerSquare.xCord, this.playerSquare.yCord, this.playerSquare.height, this.playerSquare.width)
-			//this.ctx.rect(this.playerSquare.xCord, this.playerSquare.yCord, this.playerSquare.height, this.playerSquare.width)
-			//this.ctx.fill()
-			//this.ctx.stroke()
-			//this.ctx.strokeRect(100, 560, 40, 40)
+			ctx.fillStyle = 'rgb(255, 0, 0 , 0.5)'
+			ctx.strokeStyle = this.playerSquare.strokeColor
+			ctx.lineWidth = 2
+			ctx.fillRect(this.playerSquare.xCord, this.playerSquare.yCord, this.playerSquare.height, this.playerSquare.width)
+			//ctx.rect(this.playerSquare.xCord, this.playerSquare.yCord, this.playerSquare.height, this.playerSquare.width)
+			//ctx.fill()
+			//ctx.stroke()
+			//ctx.strokeRect(100, 560, 40, 40)
 
 		}
 	},
 	// clears the whole canvas - used to prevent trailing
 	clearCanvas: function() {
-		this.ctx.clearRect(0, 0, 600, 600)
+		ctx.clearRect(0, 0, 600, 600)
 	},
 
 	// set player square animation
@@ -104,6 +114,12 @@ const game = {
 		if(this.playerSquare.yCord >= this.canvas.height - this.playerSquare.height) {
 			this.playerSquare.yCord = this.canvas.height - this.playerSquare.height
 			this.playerSquare.jumping = false
+		}
+	},
+
+	gameOver: function() {
+		if(this.lives === 0) {
+			alert("game over")
 		}
 	},
 }
