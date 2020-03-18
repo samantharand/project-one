@@ -100,35 +100,40 @@ const game = {
 	},
 
 	moveSquare: function(direction) {
-		if(this.collision === false) {
-			if(direction === "left" && this.playerSquare.velX > -this.playerSquare.speed) {
-				this.playerSquare.velX--
-			} else if (direction === "right" && this.playerSquare.velX < this.playerSquare.speed) {
-				this.playerSquare.velX++
-			} else if (direction === "up") {
-				if(this.playerSquare.jumping === false) {
-					// jump code
-					this.playerSquare.jumping = true
-					this.playerSquare.velY = -this.playerSquare.speed * 2
-				}
-			}
-			this.playerSquare.velY += this.gravity
-			
-			this.playerSquare.xCord += this.playerSquare.velX
-			this.playerSquare.yCord += this.playerSquare.velY
-			
-			if(this.playerSquare.xCord >= this.canvas.width - this.playerSquare.width) {
-				this.playerSquare.xCord = this.canvas.width - this.playerSquare.width
-			} else if (this.playerSquare.xCord <= 0) {
-				this.playerSquare.xCord = 0
-			}
-
-			if(this.playerSquare.yCord >= this.canvas.height - this.playerSquare.height) {
-				this.playerSquare.yCord = this.canvas.height - this.playerSquare.height
-				this.playerSquare.jumping = false
+		if(direction === "left" && this.playerSquare.velX > -this.playerSquare.speed) {
+			this.playerSquare.velX--
+		} else if (direction === "right" && this.playerSquare.velX < this.playerSquare.speed) {
+			this.playerSquare.velX++
+		} else if (direction === "up") {
+			if(this.playerSquare.jumping === false) {
+				// jump code
+				this.playerSquare.jumping = true
+				this.playerSquare.velY = -this.playerSquare.speed * 2
 			}
 		}
+		this.playerSquare.velY += this.gravity
+		
+		this.playerSquare.xCord += this.playerSquare.velX
+		this.playerSquare.yCord += this.playerSquare.velY
+		
+		if(this.playerSquare.xCord >= this.canvas.width - this.playerSquare.width) {
+			this.playerSquare.xCord = this.canvas.width - this.playerSquare.width
+		} else if (this.playerSquare.xCord <= 0) {
+			this.playerSquare.xCord = 0
+		}
+
+		if(this.playerSquare.yCord >= this.canvas.height - this.playerSquare.height) {
+			this.playerSquare.yCord = this.canvas.height - this.playerSquare.height
+			this.playerSquare.jumping = false
+		}
+
 		this.checkCollision()
+
+		if(this.collision === true) {
+			this.playerSquare.velX = 0
+			this.playerSquare.velY = 5
+			this.collision = false
+		}
 	},
 
 	checkCollision: function(thing) {
@@ -139,7 +144,6 @@ const game = {
 			this.collision = true
 			console.log("collision");
 		}
-
 	},
 
 	gameOver: function() {
