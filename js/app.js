@@ -79,17 +79,23 @@ const game = {
 	},
 
 	moveSquare: function(direction) {
-		if(direction === "left" && this.playerSquare.xCord - this.playerSquare.width > -40) {
-			this.playerSquare.xCord -= this.playerSquare.speed;
-		} else if (direction === "right" && this.playerSquare.xCord + this.playerSquare.width < this.canvas.width) {
-			this.playerSquare.xCord += this.playerSquare.speed;
-		} else if (direction === "up" && this.playerSquare.yCord - this.playerSquare.height > -40) {
+		if(direction === "left" && this.playerSquare.velX > -this.playerSquare.speed) {
+			this.playerSquare.velX--
+		} else if (direction === "right" && this.playerSquare.velX < this.playerSquare.speed) {
+			this.playerSquare.velX++
+		} else if (direction === "up") {
 			if(this.playerSquare.jumping === false) {
-				this.playerSquare.jumping = true
-				this.playerSquare.yCord = -this.playerSquare.speed*2
+				// jump code
 			}
 		}
+		this.playerSquare.xCord += this.playerSquare.velX
 
+		if(this.playerSquare.xCord >= this.canvas.width - this.playerSquare.width) {
+			this.playerSquare.xCord = this.canvas.width - this.playerSquare.width
+		} else if (this.playerSquare.xCord <= 0) {
+			this.playerSquare.xCord = 0
+		}
+		
 		if(this.playerSquare.yCord >= this.canvas.height - this.playerSquare.height) {
 			this.playerSquare.yCord = this.canvas.height - this.playerSquare.height
 			this.playerSquare.jumping = false
@@ -118,6 +124,7 @@ body.addEventListener('keydown', (event) => {
 
 body.addEventListener("keyup", () => {
 	game.setDirection(null)
+	game.playerSquare.velX = 0
 })
 
 
