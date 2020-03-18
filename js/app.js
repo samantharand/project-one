@@ -11,22 +11,24 @@ class Brick {
 	}
 
 	draw() {
-		ctx.fillStyle = 'black'
-		ctx.fillRect(this.xCord, this.yCord, this.width, this.height)
+		ctx.strokeStyle = 'black'
+		ctx.lineWidth = 2
+		ctx.strokeRect(this.xCord, this.yCord, this.width, this.height)
 
 	}
 }
-const b = new Brick(560, 560)
 
-class Obstacle {
-	constructor() {
+const testBrick = new Brick(500, 500)
 
-	}
+// class Obstacle {
+// 	constructor() {
 
-	draw() {
+// 	}
 
-	}
-}
+// 	draw() {
+
+// 	}
+// }
 
 const game = {
 	lives: 3,
@@ -56,7 +58,7 @@ const game = {
 		game.moveSquare(game.playerSquare.direction)
 		game.clearCanvas()
 		game.drawSquare()
-		b.draw()
+		testBrick.draw()
 		window.requestAnimationFrame(game.animate)
 	},
 	// starts game on board
@@ -122,6 +124,16 @@ const game = {
 		if(this.playerSquare.yCord >= this.canvas.height - this.playerSquare.height) {
 			this.playerSquare.yCord = this.canvas.height - this.playerSquare.height
 			this.playerSquare.jumping = false
+		}
+		this.checkCollision()
+	},
+
+	checkCollision: function(thing) {
+		if(this.playerSquare.xCord + this.playerSquare.width > testBrick.xCord
+			&& this.playerSquare.xCord < testBrick.xCord + testBrick.width
+			&& this.playerSquare.yCord + this.playerSquare.height > testBrick.yCord
+			&& this.playerSquare.yCord < testBrick.yCord + testBrick.height) {
+			console.log("collision");
 		}
 	},
 
