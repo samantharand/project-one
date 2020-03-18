@@ -60,16 +60,22 @@ const game = {
 	},
 
 	// set player square animation
-	setDirection: function() {
-	
+	setDirection: function(keyCode) {
+		if(keyCode === 37) {
+			this.playerSquare.direction = 'left'
+		} else if(keyCode === 39) {
+			this.playerSquare.direction = 'right'
+		} else if(keyCode === 38) {
+			this.playerSquare.direction = 'up'
+		}
 	},
 
 	moveSquare: function(direction) {
-		if(direction === "left" && this.playerSquare.xCord - this.playerSquare.width > -40) {
+		if(this.playerSquare.direction === "left" && this.playerSquare.xCord - this.playerSquare.width > -40) {
 			this.playerSquare.xCord -= 5;
-		} else if (direction === "right" && this.playerSquare.xCord + this.playerSquare.width < this.canvas.width) {
+		} else if (this.playerSquare.direction === "right" && this.playerSquare.xCord + this.playerSquare.width < this.canvas.width) {
 			this.playerSquare.xCord += 5;
-		} else if (direction === "up" && this.playerSquare.yCord - this.playerSquare.height > -40) {
+		} else if (this.playerSquare.direction === "up" && this.playerSquare.yCord - this.playerSquare.height > -40) {
 			this.playerSquare.yCord -= 5;
 		}
 		//this.ctx.clearRect(this.playerSquare.xCord, this.playerSquare.yCord, 40, 40)
@@ -77,6 +83,7 @@ const game = {
 		//this.drawSquare()
 	},
 }
+
 game.drawLevel()
 
 //event listners below
@@ -88,11 +95,11 @@ const body = document.querySelector('body')
 // move square
 body.addEventListener('keydown', (event) => {
 	if(event.keyCode === 37) {
-		game.moveSquare("left")
+		game.setDirection(37)
 	} else if (event.keyCode === 39) {
-		game.moveSquare("right")
+		game.setDirection(39)
 	} else if (event.keyCode === 38) {
-		game.moveSquare("up")
+		game.setDirection(38)
 	}
 });
 
