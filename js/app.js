@@ -16,6 +16,10 @@ const game = {
 	score: 0,
 	level: 1,
 	timer: null,
+	canvas: {
+		height: 600,
+		width: 600,
+	},
 	playerSquare: {
 		strokeColor: "black",
 		height: 40,
@@ -32,18 +36,22 @@ const game = {
 		if(this.level === 1) {
 			this.ctx.fillStyle = 'rgb(255, 0, 0 , 0.5)'
 			this.ctx.strokeStyle = this.playerSquare.strokeColor
+			this.ctx.lineWidth = 2
 			this.ctx.fillRect(this.playerSquare.xCord, this.playerSquare.yCord, this.playerSquare.height, this.playerSquare.width)
+			//this.ctx.rect(this.playerSquare.xCord, this.playerSquare.yCord, this.playerSquare.height, this.playerSquare.width)
+			//this.ctx.fill()
+			//this.ctx.stroke()
 			//this.ctx.strokeRect(100, 560, 40, 40)
 
 		}
 	},
 
 	moveSquare: function(direction) {
-		if(direction === "left") {		
+		if(direction === "left" && this.playerSquare.xCord - this.playerSquare.width > -40) {
 			this.playerSquare.xCord -= 5;
-		} else if (direction === "right") {
+		} else if (direction === "right" && this.playerSquare.xCord + this.playerSquare.width < this.canvas.width) {
 			this.playerSquare.xCord += 5;
-		} else if (direction === "up") {
+		} else if (direction === "up" && this.playerSquare.yCord - this.playerSquare.height > -40) {
 			this.playerSquare.yCord -= 5;
 		}
 		//this.ctx.clearRect(this.playerSquare.xCord, this.playerSquare.yCord, 40, 40)
@@ -52,13 +60,13 @@ const game = {
 	},
 }
 
+game.drawLevel()
 
 //event listners below
-const body = document.querySelector('body')
-body.addEventListener("DOMContentLoaded", () => {
-	game.drawLevel()
-})
 
+
+
+const body = document.querySelector('body')
 
 // move square
 body.addEventListener('keydown', (event) => {
