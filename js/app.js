@@ -41,6 +41,7 @@ const game = {
 		width: 600,
 	},
 	bricks:[],
+	collision: false,
 	playerSquare: {
 		strokeColor: "black",
 		height: 40,
@@ -99,31 +100,33 @@ const game = {
 	},
 
 	moveSquare: function(direction) {
-		if(direction === "left" && this.playerSquare.velX > -this.playerSquare.speed) {
-			this.playerSquare.velX--
-		} else if (direction === "right" && this.playerSquare.velX < this.playerSquare.speed) {
-			this.playerSquare.velX++
-		} else if (direction === "up") {
-			if(this.playerSquare.jumping === false) {
-				// jump code
-				this.playerSquare.jumping = true
-				this.playerSquare.velY = -this.playerSquare.speed * 2
+		if(this.collision === false) {
+			if(direction === "left" && this.playerSquare.velX > -this.playerSquare.speed) {
+				this.playerSquare.velX--
+			} else if (direction === "right" && this.playerSquare.velX < this.playerSquare.speed) {
+				this.playerSquare.velX++
+			} else if (direction === "up") {
+				if(this.playerSquare.jumping === false) {
+					// jump code
+					this.playerSquare.jumping = true
+					this.playerSquare.velY = -this.playerSquare.speed * 2
+				}
 			}
-		}
-		this.playerSquare.velY += this.gravity
-		
-		this.playerSquare.xCord += this.playerSquare.velX
-		this.playerSquare.yCord += this.playerSquare.velY
-		
-		if(this.playerSquare.xCord >= this.canvas.width - this.playerSquare.width) {
-			this.playerSquare.xCord = this.canvas.width - this.playerSquare.width
-		} else if (this.playerSquare.xCord <= 0) {
-			this.playerSquare.xCord = 0
-		}
+			this.playerSquare.velY += this.gravity
+			
+			this.playerSquare.xCord += this.playerSquare.velX
+			this.playerSquare.yCord += this.playerSquare.velY
+			
+			if(this.playerSquare.xCord >= this.canvas.width - this.playerSquare.width) {
+				this.playerSquare.xCord = this.canvas.width - this.playerSquare.width
+			} else if (this.playerSquare.xCord <= 0) {
+				this.playerSquare.xCord = 0
+			}
 
-		if(this.playerSquare.yCord >= this.canvas.height - this.playerSquare.height) {
-			this.playerSquare.yCord = this.canvas.height - this.playerSquare.height
-			this.playerSquare.jumping = false
+			if(this.playerSquare.yCord >= this.canvas.height - this.playerSquare.height) {
+				this.playerSquare.yCord = this.canvas.height - this.playerSquare.height
+				this.playerSquare.jumping = false
+			}
 		}
 		this.checkCollision()
 	},
@@ -133,8 +136,10 @@ const game = {
 			&& this.playerSquare.xCord < testBrick.xCord + testBrick.width
 			&& this.playerSquare.yCord + this.playerSquare.height > testBrick.yCord
 			&& this.playerSquare.yCord < testBrick.yCord + testBrick.height) {
+			this.collision = true
 			console.log("collision");
 		}
+
 	},
 
 	gameOver: function() {
