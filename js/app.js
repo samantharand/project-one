@@ -129,20 +129,32 @@ const game = {
 
 		this.checkCollision()
 
-		if(this.collision === true) {
-			this.playerSquare.velX = 0
-			this.playerSquare.velY = 5
-			this.collision = false
-		}
+		// if(this.collision === true) {
+		// 	this.playerSquare.velX = 0
+		// 	this.playerSquare.velY = 5
+		// 		// top 
+		// 	if(this.playerSquare.yCord < testBrick.yCord + testBrick.height) {
+		// 		this.playerSquare.yCord = testBrick.yCord - 40
+		// 	}
+		// }
 	},
 
 	checkCollision: function(thing) {
+			// left side
 		if(this.playerSquare.xCord + this.playerSquare.width > testBrick.xCord
+			// right side
 			&& this.playerSquare.xCord < testBrick.xCord + testBrick.width
+			// top
 			&& this.playerSquare.yCord + this.playerSquare.height > testBrick.yCord
+			// bottom
 			&& this.playerSquare.yCord < testBrick.yCord + testBrick.height) {
-			this.collision = true
 			console.log("collision");
+			this.playerSquare.velX = 0
+			this.playerSquare.velY = 5
+				// top 
+			if(this.playerSquare.yCord + this.playerSquare.height > testBrick.yCord && this.playerSquare.yCord + this.playerSquare.height < testBrick.yCord + testBrick.height) {
+				this.playerSquare.yCord = testBrick.yCord - 40
+			}
 		}
 	},
 
