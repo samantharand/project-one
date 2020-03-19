@@ -6,8 +6,9 @@ class Brick {
 	constructor(xCord, yCord) {
 		this.xCord = xCord
 		this.yCord = yCord
-		this.height = 40
-		this.width = 40
+		this.height = 60
+		this.width = 400
+		this.collision = false
 	}
 
 	draw() {
@@ -18,17 +19,39 @@ class Brick {
 	}
 }
 
-const testBrick = new Brick(500, 500)
+const testBrick = new Brick(100, 475)
 
-// class Obstacle {
-// 	constructor() {
+class Obstacle {
+	constructor(point) {
+		this.point = point
+		this.height = 60
+		this.width = 400
+		this.collision = false
+	}
 
-// 	}
+	draw() {
+		ctx.beginPath()
+		ctx.strokeStyle = 'black'
+		ctx.lineWidth = 2
+		ctx.moveTo(this.point, this.point)
+		ctx.lineTo(this.point, this.point + 20)
+		ctx.lineTo(this.point + 20, this.point)
+		ctx.closePath()
+		ctx.stroke()
+	}
+}
 
-// 	draw() {
+const testSpike = new Obstacle(550)
 
-// 	}
-// }
+class Bonus {
+	constructor () {
+
+	}
+
+	draw() {
+
+	}
+}
 
 const game = {
 	lives: 3,
@@ -60,6 +83,7 @@ const game = {
 		game.clearCanvas()
 		game.drawSquare()
 		testBrick.draw()
+		testSpike.draw()
 		window.requestAnimationFrame(game.animate)
 	},
 	// starts game on board
@@ -149,11 +173,21 @@ const game = {
 			// bottom
 			&& this.playerSquare.yCord < testBrick.yCord + testBrick.height) {
 			console.log("collision");
-			this.playerSquare.velX = 0
-			this.playerSquare.velY = 5
-				// top 
-			if(this.playerSquare.yCord + this.playerSquare.height > testBrick.yCord && this.playerSquare.yCord + this.playerSquare.height < testBrick.yCord + testBrick.height) {
-				this.playerSquare.yCord = testBrick.yCord - 40
+			testBrick.collision = true
+				// top vv
+			if(this.playerSquare.yCord + this.playerSquare.height > testBrick.yCord /* this.playerSquare.yCord + this.playerSquare.height < testBrick.yCord + testBrick.height*/) {
+				// this.playerSquare.velY = 5
+				this.playerSquare.yCord = this.playerSquare.yCord
+				// vv bounces off bottom vv 
+			} else 
+			if(this.playerSquare.yCord < testBrick.yCord + testBrick.height) {
+				this.playerSquare.velY = 5
+				this.playerSquare.yCord = testBrick.yCord + 60 
+
+			// } else if (this.playerSquare.xCord + this.playerSquare.width < testBrick.xCord /*|| this.playerSquare.xCord === testBrick.xCord + testBrick.width*/) {
+			// 	this.playerSquare.velX = 0
+			// 	this.playerSquare.velY = 5
+			// 	this.playerSquare.xCord = testBrick.xCord
 			}
 		}
 	},

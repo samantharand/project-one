@@ -6,3 +6,9 @@ canvas {
 	background-color: white;
 	border: 3px solid black;
 }
+
+#stats {
+	background-color: white;
+	border: 3px solid black;
+	width: 600px;
+}
