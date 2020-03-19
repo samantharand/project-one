@@ -21,27 +21,27 @@ class Brick {
 
 const testBrick = new Brick(100, 475)
 
-class Obstacle {
-	constructor(point) {
-		this.point = point
-		this.height = 60
-		this.width = 400
-		this.collision = false
-	}
+// class Obstacle {
+// 	constructor(point) {
+// 		this.point = point
+// 		this.height = 60
+// 		this.width = 400
+// 		this.collision = false
+// 	}
 
-	draw() {
-		ctx.beginPath()
-		ctx.strokeStyle = 'black'
-		ctx.lineWidth = 2
-		ctx.moveTo(this.point, this.point)
-		ctx.lineTo(this.point, this.point + 20)
-		ctx.lineTo(this.point + 20, this.point)
-		ctx.closePath()
-		ctx.stroke()
-	}
-}
+// 	draw() {
+// 		ctx.beginPath()
+// 		ctx.strokeStyle = 'black'
+// 		ctx.lineWidth = 2
+// 		ctx.moveTo(this.point, this.point)
+// 		ctx.lineTo(this.point, this.point + 20)
+// 		ctx.lineTo(this.point + 20, this.point)
+// 		ctx.closePath()
+// 		ctx.stroke()
+// 	}
+// }
 
-const testSpike = new Obstacle(550)
+// const testSpike = new Obstacle(550)
 
 class Bonus {
 	constructor () {
@@ -63,7 +63,7 @@ const game = {
 		height: 600,
 		width: 600,
 	},
-	bricks:[],
+	bricks: [],
 	collision: false,
 	playerSquare: {
 		strokeColor: "black",
@@ -83,7 +83,7 @@ const game = {
 		game.clearCanvas()
 		game.drawSquare()
 		testBrick.draw()
-		testSpike.draw()
+		//testSpike.draw()
 		window.requestAnimationFrame(game.animate)
 	},
 	// starts game on board
@@ -151,7 +151,7 @@ const game = {
 			this.playerSquare.jumping = false
 		}
 
-		this.checkCollision()
+		this.checkCollision(this.playerSquare, testBrick)
 
 		// if(this.collision === true) {
 		// 	this.playerSquare.velX = 0
@@ -163,34 +163,38 @@ const game = {
 		// }
 	},
 
-	checkCollision: function(thing) {
-			// left side
-		if(this.playerSquare.xCord + this.playerSquare.width > testBrick.xCord
-			// right side
-			&& this.playerSquare.xCord < testBrick.xCord + testBrick.width
-			// top
-			&& this.playerSquare.yCord + this.playerSquare.height > testBrick.yCord
-			// bottom
-			&& this.playerSquare.yCord < testBrick.yCord + testBrick.height) {
-			console.log("collision");
-			testBrick.collision = true
-				// top vv
-			if(this.playerSquare.yCord + this.playerSquare.height > testBrick.yCord /* this.playerSquare.yCord + this.playerSquare.height < testBrick.yCord + testBrick.height*/) {
-				// this.playerSquare.velY = 5
-				this.playerSquare.yCord = this.playerSquare.yCord
-				// vv bounces off bottom vv 
-			} else 
-			if(this.playerSquare.yCord < testBrick.yCord + testBrick.height) {
-				this.playerSquare.velY = 5
-				this.playerSquare.yCord = testBrick.yCord + 60 
+	checkCollision: function(playerSquare, brick) {
+			// finds center of the square
+		let vX = (playerSquare.xCord + (playerSquare.width / 2)) - (brick.xCord + (brick.width / 2))
+		let vY = (playerSquare.yCord +(playerSquare.height / 2)) - (brick.yCord + (brick.height / 2))
+			// adding the widths and heights
+		let hWidth = (playerSquare.width / 2) + (brick.width / 2)
+		let hHeight = (playerSquare.height / 2) + (brick.height / 2)
+		let collisionDirection = null
 
-			// } else if (this.playerSquare.xCord + this.playerSquare.width < testBrick.xCord /*|| this.playerSquare.xCord === testBrick.xCord + testBrick.width*/) {
-			// 	this.playerSquare.velX = 0
-			// 	this.playerSquare.velY = 5
-			// 	this.playerSquare.xCord = testBrick.xCord
+		if(Math.abs(vX) < hWidth && Math.abs(vY) < hHeight) {
+			let oX = hWidth - Math.abs(vX)
+			let oY = hHeight - Math.abs(vY)
+			if (oX >= oY) {
+				if (vY > 0) {
+					collisionDirection = "top"
+					playerSquare.yCord += oY
+				} else {
+					collisionDirection = "bottom"
+					playerSquare.yCord -= oY
+				}
+			} else {
+				if (vX > 0) {
+					collisionDirection = "left"
+					playerSquare.xCord += oX
+				} else {
+					collisionDirection = "right"
+					playerSquare.xCord -= oX
+				}
 			}
+			return collisionDirection
 		}
-	},
+	},	
 
 	gameOver: function() {
 		if(this.lives === 0) {
@@ -199,6 +203,7 @@ const game = {
 	},
 }
 
+game.bricks.push(testBrick)
 game.drawLevel()
 
 //event listners below
