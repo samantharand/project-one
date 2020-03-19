@@ -78,7 +78,7 @@ const game = {
 		jumping: false,
 		grounded: false,
 	},
-	collisionDirection: null,
+	collisionDirection: "bottom",
 	// smoother movement? -- why wont it work with "this"
 	animate: function() {
 		game.moveSquare(game.playerSquare.direction)
@@ -126,6 +126,8 @@ const game = {
 	},
 
 	moveSquare: function(direction) {
+		//this.playerSquare.grounded = true
+
 		if(direction === "left" && this.playerSquare.velX > -this.playerSquare.speed) {
 			this.playerSquare.velX--
 		} else if (direction === "right" && this.playerSquare.velX < this.playerSquare.speed) {
@@ -138,48 +140,58 @@ const game = {
 				this.playerSquare.velY = -this.playerSquare.speed * 2
 			}
 		}
+
 		this.playerSquare.velY += this.gravity
 		
-		this.playerSquare.xCord += this.playerSquare.velX
-		this.playerSquare.yCord += this.playerSquare.velY
+		// this.playerSquare.xCord += this.playerSquare.velX
+		// this.playerSquare.yCord += this.playerSquare.velY
 		
 		// if(this.playerSquare.xCord >= this.canvas.width - this.playerSquare.width) {
 		// 	this.playerSquare.xCord = this.canvas.width - this.playerSquare.width
+		// 	this.playerSquare.grounded = true
 		// } else if (this.playerSquare.xCord <= 0) {
 		// 	this.playerSquare.xCord = 0
 		// 	this.playerSquare.jumping = false
+		// 	this.playerSquare.grounded = true
+
 		// }
 
-		if(this.playerSquare.yCord >= this.canvas.height - this.playerSquare.height) {
-			this.playerSquare.yCord = this.canvas.height - this.playerSquare.height
-			this.playerSquare.jumping = false
-		}
-
-		if(this.collisionDirection === "left" || this.collisionDirection === "right") {
-			this.playerSquare.velX = 0
-			this.playerSquare.jumping = false
-		} else if (this.collisionDirection === "bottom") {
-			this.playerSquare.grounded = true
-			this.playerSquare.jumping = false
-		} else if (this.collisionDirection === "top") {
-			playerSquare.velY *= -1
-		}
-
-		this.checkCollision(this.playerSquare, testBrick)
-
-		// if(this.collision === true) {
-		// 	this.playerSquare.velX = 0
-		// 	this.playerSquare.velY = 5
-		// 		// top 
-		// 	if(this.playerSquare.yCord < testBrick.yCord + testBrick.height) {
-		// 		this.playerSquare.yCord = testBrick.yCord - 40
-		// 	}
+		// if(this.playerSquare.yCord >= this.canvas.height - this.playerSquare.height) {
+		// 	this.playerSquare.yCord = this.canvas.height - this.playerSquare.height
+		// 	this.playerSquare.jumping = false
 		// }
+
+
+		
+
+		for(let i = 0; i < this.bricks.length; i++) {
+			this.checkCollision(this.playerSquare, this.bricks[i])
+			//console.log(this.bricks[i]);
+			if(this.collisionDirection === "left" || this.collisionDirection === "right") {
+				this.playerSquare.velX = 0
+				this.playerSquare.jumping = false
+			} else if (this.collisionDirection === "bottom") {
+				this.playerSquare.grounded = true
+				this.playerSquare.jumping = false
+			} else if (this.collisionDirection === "top") {
+				this.playerSquare.velY *= -1
+			}
+		}
+
+		if(this.playerSquare.grounded === true ) {
+			this.playerSquare.velY = 0
+		}
+
+		this.playerSquare.xCord += this.playerSquare.velX
+		this.playerSquare.yCord += this.playerSquare.velY
+
 	},
 
 	checkCollision: function(playerSquare, brick) {
 			// finds center of the square
+
 		let vX = (playerSquare.xCord + (playerSquare.width / 2)) - (brick.xCord + (brick.width / 2))
+
 		let vY = (playerSquare.yCord +(playerSquare.height / 2)) - (brick.yCord + (brick.height / 2))
 			// adding the widths and heights
 		let hWidth = (playerSquare.width / 2) + (brick.width / 2)
@@ -205,7 +217,6 @@ const game = {
 					playerSquare.xCord -= oX
 				}
 			}
-			return this.collisionDirection
 		}
 	},	
 
