@@ -76,7 +76,9 @@ const game = {
 		velY:0,
 		direction: null,
 		jumping: false,
+		grounded: false,
 	},
+	collisionDirection: null,
 	// smoother movement? -- why wont it work with "this"
 	animate: function() {
 		game.moveSquare(game.playerSquare.direction)
@@ -129,9 +131,10 @@ const game = {
 		} else if (direction === "right" && this.playerSquare.velX < this.playerSquare.speed) {
 			this.playerSquare.velX++
 		} else if (direction === "up") {
-			if(this.playerSquare.jumping === false) {
+			if(this.playerSquare.jumping === false && this.playerSquare.grounded === true) {
 				// jump code
 				this.playerSquare.jumping = true
+				this.playerSquare.grounded = false
 				this.playerSquare.velY = -this.playerSquare.speed * 2
 			}
 		}
@@ -140,15 +143,26 @@ const game = {
 		this.playerSquare.xCord += this.playerSquare.velX
 		this.playerSquare.yCord += this.playerSquare.velY
 		
-		if(this.playerSquare.xCord >= this.canvas.width - this.playerSquare.width) {
-			this.playerSquare.xCord = this.canvas.width - this.playerSquare.width
-		} else if (this.playerSquare.xCord <= 0) {
-			this.playerSquare.xCord = 0
-		}
+		// if(this.playerSquare.xCord >= this.canvas.width - this.playerSquare.width) {
+		// 	this.playerSquare.xCord = this.canvas.width - this.playerSquare.width
+		// } else if (this.playerSquare.xCord <= 0) {
+		// 	this.playerSquare.xCord = 0
+		// 	this.playerSquare.jumping = false
+		// }
 
 		if(this.playerSquare.yCord >= this.canvas.height - this.playerSquare.height) {
 			this.playerSquare.yCord = this.canvas.height - this.playerSquare.height
 			this.playerSquare.jumping = false
+		}
+
+		if(this.collisionDirection === "left" || this.collisionDirection === "right") {
+			this.playerSquare.velX = 0
+			this.playerSquare.jumping = false
+		} else if (this.collisionDirection === "bottom") {
+			this.playerSquare.grounded = true
+			this.playerSquare.jumping = false
+		} else if (this.collisionDirection === "top") {
+			playerSquare.velY *= -1
 		}
 
 		this.checkCollision(this.playerSquare, testBrick)
@@ -170,29 +184,28 @@ const game = {
 			// adding the widths and heights
 		let hWidth = (playerSquare.width / 2) + (brick.width / 2)
 		let hHeight = (playerSquare.height / 2) + (brick.height / 2)
-		let collisionDirection = null
 
 		if(Math.abs(vX) < hWidth && Math.abs(vY) < hHeight) {
 			let oX = hWidth - Math.abs(vX)
 			let oY = hHeight - Math.abs(vY)
 			if (oX >= oY) {
 				if (vY > 0) {
-					collisionDirection = "top"
+					this.collisionDirection = "top"
 					playerSquare.yCord += oY
 				} else {
-					collisionDirection = "bottom"
+					this.collisionDirection = "bottom"
 					playerSquare.yCord -= oY
 				}
 			} else {
 				if (vX > 0) {
-					collisionDirection = "left"
+					this.collisionDirection = "left"
 					playerSquare.xCord += oX
 				} else {
-					collisionDirection = "right"
+					this.collisionDirection = "right"
 					playerSquare.xCord -= oX
 				}
 			}
-			return collisionDirection
+			return this.collisionDirection
 		}
 	},	
 
