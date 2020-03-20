@@ -101,6 +101,7 @@ class Player {
 		}
 		//console.log(this.direction);
 		this.velY += game.gravity
+		this.velX *= game.friction
 		
 		this.xCord += this.velX
 		this.yCord += this.velY
@@ -130,6 +131,7 @@ const game = {
 	level: 1,
 	timer: null,
 	gravity: 0.3,
+	friction: .9,
 	canvas: {
 		height: 600,
 		width: 600,
