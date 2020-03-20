@@ -77,7 +77,13 @@ class Player {
 	}
 
 	unsetDirection(keyCode) {
-
+	if(keyCode === 37) {
+		newPlayer.direction.left = false
+	} else if (keyCode === 39) {
+		newPlayer.direction.right = false
+	} else if (keyCode === 38) {
+		newPlayer.direction.up = false
+	}
 	}
 
 	move() {
@@ -154,10 +160,10 @@ document.body.addEventListener('keydown', (event) => {
 
 document.body.addEventListener("keyup", (event) => {
 	if(event.keyCode === 37) {
-		newPlayer.direction.left = false
+		newPlayer.unsetDirection(37)
 	} else if (event.keyCode === 39) {
-		newPlayer.direction.right = false
+		newPlayer.unsetDirection(39)
 	} else if (event.keyCode === 38) {
-		newPlayer.direction.up = false
+		newPlayer.unsetDirection(38)
 	}
 })
