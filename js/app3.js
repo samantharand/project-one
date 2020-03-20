@@ -18,7 +18,7 @@ function animate() {
 }
 
 function stopAnimate() {
-
+	// idk tbh
 }
 
 // clears the whole canvas - used to prevent trailing
@@ -124,7 +124,7 @@ class Brick {
 
 	draw() {
 		if(game.level === 1) {
-			ctx.clearRect(0, 0, game.canvas.width, game.canvas.height)
+			clearCanvas()
 			ctx.fillStyle = "black"
 			ctx.fillRect(this.xCord, this.yCord, this.width, this.height)
 		}
@@ -151,20 +151,68 @@ const game = {
 		width: 600,
 	},
 
-	printLevelOne: function() {
-		if(game.level === 1) {
+	setUpLevel: function() {
+		if(this.level === 1) {
 			const brick1 = new Brick(300, 450, 200, 40)
 			this.bricks.push(brick1)
+		}
+	},
 
-			for(let i = 0; i < this.bricks.length; i++) {
-				this.bricks[i].draw()
+	printLevelOne: function() {
+
+		for(let i = 0; i < this.bricks.length; i++) {
+			this.bricks[i].draw()
+
+			let dir = this.collisionDetection(newPlayer, this.bricks[i])
+
+			if(dir === "left" || dir === "right") {
+				newPlayer.velX = 0
+				newPlayer.jumping = false
+			} else if (dir === "bottom") {
+				newPlayer.grounded = true
+				newPlayer.jumping = false
+			} else if (dir === "top") {
+				newPlayer.velY *= -1
 			}
 		}
+	},
+
+	collisionDetection(playerSquare, brick) {
+			// finds center of the square
+		let vX = (playerSquare.xCord + (playerSquare.width / 2)) - (brick.xCord + (brick.width / 2))
+
+		let vY = (playerSquare.yCord +(playerSquare.height / 2)) - (brick.yCord + (brick.height / 2))
+			// adding the widths and heights
+		let hWidth = (playerSquare.width / 2) + (brick.width / 2)
+		let hHeight = (playerSquare.height / 2) + (brick.height / 2)
+
+		if(Math.abs(vX) < hWidth && Math.abs(vY) < hHeight) {
+			let oX = hWidth - Math.abs(vX)
+			let oY = hHeight - Math.abs(vY)
+			if (oX >= oY) {
+				if (vY > 0) {
+					collisionDirection = "top"
+					playerSquare.yCord += oY
+				} else {
+					collisionDirection = "bottom"
+					playerSquare.yCord -= oY
+				}
+			} else {
+				if (vX > 0) {
+					collisionDirection = "left"
+					playerSquare.xCord += oX
+				} else {
+					collisionDirection = "right"
+					playerSquare.xCord -= oX
+				}
+			}
+		}
+		return this.collisionDirection
 	}
 }
 
 const newPlayer = new Player(100, 450)
-
+game.setUpLevel()
 animate()
 
 
