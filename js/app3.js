@@ -2,9 +2,11 @@ console.log("Hello Project 1 v3");
 
 const ctx = document.querySelector('#game-canvas').getContext('2d')
 
+
 function animate() {
 	clearCanvas()
 	newPlayer.draw()
+	newPlayer.move()
 	//updateCanvas(playerSquare.direction)
 	//drawSquare()
 	//printWinBrick()
@@ -23,11 +25,15 @@ function clearCanvas() {
 	ctx.clearRect(0, 0, 600, 600)
 }
 
+
+// CLASSES
+
+
 class Player {
 	constructor(xCord, yCord) {
 		this.strokeColor = "black"
 		this.height = 40
-		this.width = 0
+		this.width = 40
 		this.xCord = xCord
 		this.yCord = yCord
 		this.speed = 5
@@ -39,7 +45,7 @@ class Player {
 	}
 
 	draw() {
-		// if(game.level === 1) {
+		if(game.level === 1) {
 			ctx.fillStyle = 'rgb(255, 0, 0 , 0.5)'
 			ctx.strokeStyle = this.strokeColor
 			ctx.fillRect(this.xCord, this.yCord, 40, 40)
@@ -49,12 +55,79 @@ class Player {
 			//ctx.stroke()
 			//ctx.strokeRect(100, 560, 40, 40)
 
-		//}
+		}
+	}
+
+	setDirection(keyCode) {
+		console.log("setDirection");
+		if(keyCode === 37) {
+			this.direction = 'left'
+		} else if(keyCode === 39) {
+			this.direction = 'right'
+		} else if(keyCode === 38) {
+			this.direction = 'up'
+		} else {
+			this.direction = null
+		}
+	}
+
+	unsetDirection(keyCode) {
+
+	}
+
+	move(direction) {
+
+		if(this.direction === "left" && this.velX > -this.speed) {
+			this.velX--
+		} else if (this.direction === "right" && this.velX < this.speed) {
+			this.velX++
+		} else if (this.direction === "up") {
+			if(this.jumping === false) {
+				// jump code
+				this.jumping = true
+				this.velY = -this.speed * 2
+			}
+		}
+		this.velY += game.gravity
+		
+		this.xCord += this.velX
+		this.yCord += this.velY
+
+		if(this.xCord + this.width >= game.canvas.width) {
+			this.xCord = game.canvas.width - this.width
+			this.velX = 0
+		} else if (this.xCord <= 0) {
+			this.xCord = 0
+		}
+
+		if(this.yCord >= game.canvas.height - this.height) {
+			this.yCord = game.canvas.height - this.height
+			this.jumping = false
+		}
+
 	}
 }
 
+
+
+// GAME OBJECT
+
 const game = {
+	lives: 3,
+	score: 0,
 	level: 1,
+	timer: null,
+	gravity: 0.3,
+	canvas: {
+		height: 600,
+		width: 600,
+	},
+	bricks: [],
+	collision: false,
+	canvas: {
+		height: 600,
+		width: 600,
+	}
 }
 
 const newPlayer = new Player(100, 560)
@@ -62,4 +135,18 @@ const newPlayer = new Player(100, 560)
 animate()
 
 
+// event listeners
+document.body.addEventListener('keydown', (event) => {
+	if(event.keyCode === 37) {
+		newPlayer.setDirection(37)
+	} else if (event.keyCode === 39) {
+		newPlayer.setDirection(39)
+	} else if (event.keyCode === 38) {
+		newPlayer.setDirection(38)
+	}
+});
 
+document.body.addEventListener("keyup", () => {
+	newPlayer.setDirection(null)
+	collisionDirection = null
+})
