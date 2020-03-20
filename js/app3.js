@@ -5,6 +5,7 @@ const ctx = document.querySelector('#game-canvas').getContext('2d')
 
 function animate() {
 	clearCanvas()
+	game.printLevelOne()
 	newPlayer.draw()
 	newPlayer.move()
 	//updateCanvas(playerSquare.direction)
@@ -27,8 +28,6 @@ function clearCanvas() {
 
 
 // CLASSES
-
-
 class Player {
 	constructor(xCord, yCord) {
 		this.strokeColor = "black"
@@ -54,12 +53,6 @@ class Player {
 			ctx.fillStyle = 'rgb(255, 0, 0 , 0.5)'
 			ctx.strokeStyle = this.strokeColor
 			ctx.fillRect(this.xCord, this.yCord, 40, 40)
-			//ctx.lineWidth = 2
-			//ctx.rect(this.xCord, this.yCord, this.height, this.width)
-			//ctx.fill()
-			//ctx.stroke()
-			//ctx.strokeRect(100, 560, 40, 40)
-
 		}
 	}
 
@@ -99,7 +92,7 @@ class Player {
 				this.velY = -this.speed * 2
 			}
 		}
-		//console.log(this.direction);
+
 		this.velY += game.gravity
 		this.velX *= game.friction
 		
@@ -121,7 +114,22 @@ class Player {
 	}
 }
 
+class Brick {
+	constructor(xCord, yCord, width, height){
+		this.xCord = xCord
+		this.yCord = yCord
+		this.width = width
+		this.height = height
+	}
 
+	draw() {
+		if(game.level === 1) {
+			ctx.clearRect(0, 0, game.canvas.width, game.canvas.height)
+			ctx.fillStyle = "black"
+			ctx.fillRect(this.xCord, this.yCord, this.width, this.height)
+		}
+	}
+}
 
 // GAME OBJECT
 
@@ -141,10 +149,21 @@ const game = {
 	canvas: {
 		height: 600,
 		width: 600,
+	},
+
+	printLevelOne: function() {
+		if(game.level === 1) {
+			const brick1 = new Brick(300, 450, 200, 40)
+			this.bricks.push(brick1)
+
+			for(let i = 0; i < this.bricks.length; i++) {
+				this.bricks[i].draw()
+			}
+		}
 	}
 }
 
-const newPlayer = new Player(100, 560)
+const newPlayer = new Player(100, 450)
 
 animate()
 
