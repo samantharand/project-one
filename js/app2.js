@@ -2,18 +2,18 @@ console.log("Project One v2");
 
 const ctx = document.querySelector('#game-canvas').getContext('2d')
 
-lives = 3
-score = 0
-level = 1
-timer = null
-gravity = 0.3
-canvas = {
+let lives = 3
+let score = 0
+let level = 1
+let timer = null
+let gravity = 0.3
+const canvas = {
 	height: 600,
 	width: 600,
 }
-bricks = []
-collision = false
-playerSquare = {
+let bricks = []
+let collision = false
+const playerSquare = {
 	strokeColor: "black",
 	height: 40,
 	width: 40,
@@ -24,12 +24,31 @@ playerSquare = {
 	velY:0,
 	direction: null,
 	jumping: false,
-	grounded: true,
+	grounded: false,
 }
-collisionDirection = null
+let collisionDirection = null
 
 
 // dimensions
+bricks.push({
+    xCord: 0,
+    yCord: 0,
+    width: 10,
+    height: canvas.height
+});
+bricks.push({
+    xCord: 0,
+    yCord: canvas.height - 2,
+    width: canvas.width,
+    height: 50
+});
+bricks.push({
+    xCord: canvas.width - 10,
+    yCord: 0,
+    width: 50,
+    height: canvas.height
+});
+
 bricks.push({
     xCord: 120,
     yCord: 510,
@@ -97,46 +116,44 @@ function setDirection(keyCode) {
 }
 
 function updateCanvas(direction) {
-	//playerSquare.grounded = true
-
-	if(direction === "left" && playerSquare.velX > -playerSquare.speed) {
-		playerSquare.velX--
-	} else if (direction === "right" && playerSquare.velX < playerSquare.speed) {
-		playerSquare.velX++
-	} else if (direction === "up") {
+	if (direction === "up") {
 		if(playerSquare.jumping === false && playerSquare.grounded === true) {
 			// jump code
 			playerSquare.jumping = true
 			playerSquare.grounded = false
 			playerSquare.velY = -playerSquare.speed * 2
 		}
-	}
+	} else if(direction === "left" && playerSquare.velX > -playerSquare.speed) {
+		playerSquare.velX--
+	} else if (direction === "right" && playerSquare.velX < playerSquare.speed) {
+		playerSquare.velX++
+	} 
 
-	if(playerSquare.xCord >= canvas.width - playerSquare.width) {
-		playerSquare.xCord = canvas.width - playerSquare.width
-	} else if (playerSquare.xCord <= 0) {
-		playerSquare.xCord = 0
-	}
+	// if(playerSquare.xCord >= canvas.width - playerSquare.width) {
+	// 	playerSquare.xCord = canvas.width - playerSquare.width
+	// } else if (playerSquare.xCord <= 0) {
+	// 	playerSquare.xCord = 0
+	// }
 
 	playerSquare.velY += gravity
 
-	playerSquare.grounded = false
 	
 	ctx.beginPath()
 	ctx.fillStyle = "black"
 
+	playerSquare.grounded = false
 	for(let i = 0; i < bricks.length; i++) {
 		ctx.fillRect(bricks[i].xCord, bricks[i].yCord, bricks[i].width, bricks[i].height)
 		//ctx.closePath()
-		checkCollision(playerSquare, bricks[i])
+		let dir = checkCollision(playerSquare, bricks[i])
 	
-		if(collisionDirection === "left" || collisionDirection === "right") {
+		if(dir === "left" || dir === "right") {
 			playerSquare.velX = 0
 			playerSquare.jumping = false
-		} else if (collisionDirection === "bottom") {
+		} else if (dir === "bottom") {
 			playerSquare.grounded = true
 			playerSquare.jumping = false
-		} else if (collisionDirection === "top") {
+		} else if (dir === "top") {
 			playerSquare.velY *= -1
 		}
 	}
@@ -148,10 +165,11 @@ function updateCanvas(direction) {
 	playerSquare.xCord += playerSquare.velX
 	playerSquare.yCord += playerSquare.velY
 		
-
+	//drawSquare()
 	// if(playerSquare.yCord >= canvas.height - playerSquare.height) {
 	// 	 	playerSquare.yCord = canvas.height - playerSquare.height
 	//  		playerSquare.jumping = false
+	//  		playerSquare.grounded = true
 	//  	}
 
 }
