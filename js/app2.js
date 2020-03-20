@@ -26,58 +26,88 @@ const playerSquare = {
 	jumping: false,
 	grounded: false,
 }
+const winSquare = {
+
+}
 let collisionDirection = null
+let friction = 0.8
 
 
 // dimensions
+// left wall
 bricks.push({
     xCord: 0,
     yCord: 0,
     width: 10,
     height: canvas.height
 });
+//bottom
 bricks.push({
     xCord: 0,
     yCord: canvas.height - 2,
     width: canvas.width,
     height: 50
 });
+// right wall
 bricks.push({
     xCord: canvas.width - 10,
     yCord: 0,
     width: 50,
     height: canvas.height
 });
+//top test
+bricks.push({
+    xCord: 0,
+    yCord: .000006,
+    width: canvas.width,
+    height: 50
+});
 
-bricks.push({
-    xCord: 120,
-    yCord: 510,
-    width: 80,
-    height: 80
-});
-bricks.push({
-    xCord: 170,
-    yCord: 550,
-    width: 80,
-    height: 80
-});
-bricks.push({
-    xCord: 220,
-    yCord: 600,
-    width: 80,
-    height: 80
-});
-bricks.push({
-    xCord: 270,
-    yCord: 550,
-    width: 40,
-    height: 40
-});
+// // actual level
+// bricks.push({
+//     xCord: 120,
+//     yCord: 510,
+//     width: 80,
+//     height: 80
+// });
+// bricks.push({
+//     xCord: 170,
+//     yCord: 550,
+//     width: 80,
+//     height: 80
+// });
+// bricks.push({
+//     xCord: 220,
+//     yCord: 600,
+//     width: 80,
+//     height: 80
+// });
+// bricks.push({
+//     xCord: 270,
+//     yCord: 550,
+//     width: 40,
+//     height: 40
+// });
+if(level === 1) {
+	bricks.push({
+	    xCord: 300,
+	    yCord: 450,
+	    width: 200,
+	    height: 40
+	});
+	bricks.push({
+	    xCord: 100,
+	    yCord: 250,
+	    width: 200,
+	    height: 40
+	});
+}
 
 function animate() {
 	clearCanvas()
-	drawSquare()
 	updateCanvas(playerSquare.direction)
+	drawSquare()
+	//printWinBrick()
 	//drawBricks()
 	//testBrick.draw()
 	//testSpike.draw()
@@ -90,6 +120,14 @@ function drawSquare() {
 	ctx.fillRect(playerSquare.xCord, playerSquare.yCord, playerSquare.height, playerSquare.width)
 }
 
+// function printWinBrick() {
+// 	if(level === 1) {
+// 		ctx.beginPath()
+//  		ctx.fillStyle = 'rgb(255, 0, 0 , 0.5)'
+//  		ctx.fillRect(bricks[i].xCord, bricks[i].yCord, bricks[i].width, bricks[i].height)
+//  		checkCollision(playerSquare, bricks[i])
+// 	}
+// }
 // function drawBricks() {
 // 	for(let i = 0; i < bricks.length; i++) {
 // 		ctx.beginPath()
@@ -116,12 +154,17 @@ function setDirection(keyCode) {
 }
 
 function updateCanvas(direction) {
+	
+
 	if (direction === "up") {
-		if(playerSquare.jumping === false && playerSquare.grounded === true) {
+		if(playerSquare.jumping === false /*&& playerSquare.grounded === true*/) {
 			// jump code
 			playerSquare.jumping = true
 			playerSquare.grounded = false
 			playerSquare.velY = -playerSquare.speed * 2
+			// setTimeout(() => {
+			// 	playerSquare.velY = 10
+			// }, 100)
 		}
 	} else if(direction === "left" && playerSquare.velX > -playerSquare.speed) {
 		playerSquare.velX--
@@ -129,22 +172,15 @@ function updateCanvas(direction) {
 		playerSquare.velX++
 	} 
 
-	// if(playerSquare.xCord >= canvas.width - playerSquare.width) {
-	// 	playerSquare.xCord = canvas.width - playerSquare.width
-	// } else if (playerSquare.xCord <= 0) {
-	// 	playerSquare.xCord = 0
-	// }
-
+	playerSquare.velX *= friction
 	playerSquare.velY += gravity
 
-	
-	ctx.beginPath()
+	ctx.clearRect(0, 0, canvas.width, canvas.height)
 	ctx.fillStyle = "black"
 
 	playerSquare.grounded = false
 	for(let i = 0; i < bricks.length; i++) {
 		ctx.fillRect(bricks[i].xCord, bricks[i].yCord, bricks[i].width, bricks[i].height)
-		//ctx.closePath()
 		let dir = checkCollision(playerSquare, bricks[i])
 	
 		if(dir === "left" || dir === "right") {
@@ -157,21 +193,18 @@ function updateCanvas(direction) {
 			playerSquare.velY *= -1
 		}
 	}
+	// vv THIS CODE IS BREAKING JUMP 
+	// if(playerSquare.grounded === true) {
+	// 	playerSquare.velY += 0
+	// }
+
+	playerSquare.xCord += playerSquare.velX
+	playerSquare.yCord += playerSquare.velY
 
 	if(playerSquare.grounded === true) {
 		playerSquare.velY = 0
 	}
-
-	playerSquare.xCord += playerSquare.velX
-	playerSquare.yCord += playerSquare.velY
-		
-	//drawSquare()
-	// if(playerSquare.yCord >= canvas.height - playerSquare.height) {
-	// 	 	playerSquare.yCord = canvas.height - playerSquare.height
-	//  		playerSquare.jumping = false
-	//  		playerSquare.grounded = true
-	//  	}
-
+	
 }
 
 function checkCollision(playerSquare, brick) {
@@ -225,7 +258,7 @@ document.body.addEventListener('keydown', (event) => {
 
 document.body.addEventListener("keyup", () => {
 	setDirection(null)
-	playerSquare.velX = 0
+	collisionDirection = null
 })
 
 
