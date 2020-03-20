@@ -39,7 +39,12 @@ class Player {
 		this.speed = 5
 		this.velX = 0
 		this.velY = 0
-		this.direction = null
+		this.direction = {
+			up: false,
+			down: false,
+			left: false,
+			right: false,
+		}
 		this.jumping = false
 		this.grounded = false
 	}
@@ -61,13 +66,13 @@ class Player {
 	setDirection(keyCode) {
 		console.log("setDirection");
 		if(keyCode === 37) {
-			this.direction = 'left'
+			this.direction.left = true
 		} else if(keyCode === 39) {
-			this.direction = 'right'
+			this.direction.right = true
 		} else if(keyCode === 38) {
-			this.direction = 'up'
+			this.direction.up = true
 		} else {
-			this.direction = null
+			//this.direction = null
 		}
 	}
 
@@ -75,19 +80,20 @@ class Player {
 
 	}
 
-	move(direction) {
-
-		if(this.direction === "left" && this.velX > -this.speed) {
+	move() {
+		//console.log(this.direction);
+		if(this.direction.left === true && this.velX > -this.speed) {
 			this.velX--
-		} else if (this.direction === "right" && this.velX < this.speed) {
+		} else if (this.direction.right === true && this.velX < this.speed) {
 			this.velX++
-		} else if (this.direction === "up") {
+		} else if (this.direction.up === true) {
 			if(this.jumping === false) {
 				// jump code
 				this.jumping = true
 				this.velY = -this.speed * 2
 			}
 		}
+		//console.log(this.direction);
 		this.velY += game.gravity
 		
 		this.xCord += this.velX
@@ -146,7 +152,12 @@ document.body.addEventListener('keydown', (event) => {
 	}
 });
 
-document.body.addEventListener("keyup", () => {
-	newPlayer.setDirection(null)
-	collisionDirection = null
+document.body.addEventListener("keyup", (event) => {
+	if(event.keyCode === 37) {
+		newPlayer.direction.left = false
+	} else if (event.keyCode === 39) {
+		newPlayer.direction.right = false
+	} else if (event.keyCode === 38) {
+		newPlayer.direction.up = false
+	}
 })
