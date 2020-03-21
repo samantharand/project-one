@@ -35,12 +35,15 @@ function stopAnimate() {
 		animateAfterDeath()
 		if(game.win === true) {
 			game.score += 50
+			game.level++
 			console.log(game.score);
+			clearInterval(game.intervalID)
 		} else if(newPlayer.collision === true) {
 			game.lives--
 		}
 		game.updateStats()
 	}
+
 }
 
 // clears the whole canvas - used to prevent trailing
@@ -143,6 +146,8 @@ class Player {
 	}
 }
 
+////////
+
 class Brick {
 	constructor(xCord, yCord, width, height){
 		this.xCord = xCord
@@ -159,6 +164,8 @@ class Brick {
 		}
 	}
 }
+
+////////
 
 class Winner {
 	constructor(xCord, yCord, width, height){
@@ -193,9 +200,18 @@ const game = {
 	lose: false,
 	win: false,
 	winSquare: null,
+	intervalID: null,
+
+	startTimer() {
+		this.intervalID = setInterval(() => {
+			this.timer--
+			this.updateStats()
+		}, 1000)
+	},
 
 	playGame: function() {
-		game.setUpLevel()
+		this.startTimer()
+		this.setUpLevel()
 		animate()
 		if(this.win === true) {
 			this.score += 50
@@ -208,6 +224,10 @@ const game = {
 		this.win = false
 		if(this.level === 1) {
 			const brick1 = new Brick(350, 200, 40, 200)
+			const brick2 = new Brick(150, 230, 40, 200)
+			this.bricks.push(brick1, brick2)
+		} else if(this.level === 2) {
+			const brick1 = new Brick(350, 400, 40, 200)
 			const brick2 = new Brick(150, 230, 40, 200)
 			this.bricks.push(brick1, brick2)
 		}
