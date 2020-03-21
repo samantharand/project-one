@@ -16,8 +16,12 @@ function animate() {
 
 function stopAnimate() {
 	// idk tbh
-	animationRunning = false
-	cancelAnimationFrame(requestID)
+	//console.log("stopAnimate called");
+	if(game.win === true || newPlayer.collision === true){
+		//console.log("stopAnimate called");
+		animationRunning = false
+		cancelAnimationFrame(requestID)
+	}
 }
 
 // clears the whole canvas - used to prevent trailing
@@ -64,16 +68,18 @@ class Player {
 	}
 
 	stayOnScreen() {
-		if(this.xCord + this.width >= game.canvas.width) {
-			this.xCord = game.canvas.width - this.width
-			this.velX = 0
-		} else if (this.xCord <= 0) {
-			this.xCord = 0
-		}
+		if(this.collision === false) {
+			if(this.xCord + this.width >= game.canvas.width) {
+				this.xCord = game.canvas.width - this.width
+				this.velX = 0
+			} else if (this.xCord <= 0) {
+				this.xCord = 0
+			}
 
-		if(this.yCord >= game.canvas.height - this.height) {
-			this.yCord = game.canvas.height - this.height
-			this.jumping = false
+			if(this.yCord >= game.canvas.height - this.height) {
+				this.yCord = game.canvas.height - this.height
+				this.jumping = false
+			}
 		}
 	}
 
@@ -134,8 +140,9 @@ class Brick {
 
 	draw() {
 		if(game.level === 1) {
-			ctx.fillStyle = "black"
-			ctx.fillRect(this.xCord, this.yCord, this.width, this.height)
+			ctx.strokeStyle = "black"
+			ctx.lineWidth = 3
+			ctx.strokeRect(this.xCord, this.yCord, this.width, this.height)
 		}
 	}
 }
@@ -170,13 +177,16 @@ const game = {
 	},
 	bricks: [],
 	collisionDirection : null,
+	lose: false,
 	win: false,
 	winSquare: null,
 
 	setUpLevel: function() {
+		this.win = false
 		if(this.level === 1) {
-			const brick1 = new Brick(300, 60, 40, 150)
-			this.bricks.push(brick1)
+			const brick1 = new Brick(350, 200, 40, 200)
+			const brick2 = new Brick(150, 230, 40, 200)
+			this.bricks.push(brick1, brick2)
 		}
 	},
 
@@ -201,14 +211,15 @@ const game = {
 	      // the brick's bottom edge is below my top edge
 	      brick.yCord + brick.height > playerSquare.yCord) {  
 		   
-		    console.log("collision")
-
-			if(brick === this.winSquare) {
-				setTimeout(() => {	
-					this.win = true
-				}, 500)
-			} else {
-		  		newPlayer.collision = true
+		    //console.log("collision")
+			if(this.win === false) {			
+				if(brick === this.winSquare) {
+					setTimeout(() => {	
+						this.win = true
+					}, 500)
+				} else {
+			  		newPlayer.collision = true
+				}
 			}
 	    }
 	   
@@ -231,26 +242,33 @@ const game = {
 	},
 
 	winGame() {
-		console.log("win");
+		//console.log("win");
+		this.score = 50
 		stopAnimate()
 		clearCanvas()
 		ctx.font = '20px Georgia'
-		ctx.fillText("Hello You WIN", 10, 50)
+		ctx.fillStyle = "black"
+		ctx.fillText("you win :)", 10, 50)
 	},
 
 	gameOver() {
-		console.log("game over");
+		//console.log("game over");
+		if(lives === 0) {
+
+		}
 		stopAnimate()
 		clearCanvas()
 		ctx.font = '20px Georgia'
+		ctx.fillStyle = "black"
 		ctx.fillText("u lose :(", 10, 50)
 	}
 
 }
 
-const newPlayer = new Player(100, 150)
+const newPlayer = new Player(10, 150)
 game.setUpLevel()
 animate()
+stopAnimate()
 
 // event listeners
 document.body.addEventListener('keydown', (event) => {
@@ -271,4 +289,8 @@ document.body.addEventListener("keyup", (event) => {
 	} else if (event.keyCode === 38) {
 		newPlayer.unsetDirection(38)
 	}
+})
+
+document.body.addEventListener("click", (event) => {
+	console.log(event);
 })
