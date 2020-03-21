@@ -1,26 +1,38 @@
 console.log("Hello Project 1 v3");
 
 const ctx = document.querySelector('#game-canvas').getContext('2d')
+const level = document.querySelector('#level')
+const timer = document.querySelector('#timer')
+const lives = document.querySelector('#lives')
+const score = document.querySelector('#score')
 
 let requestID;
-let animationRunning = false;
 
 function animate() {
-	animationRunning = true
+	
 	clearCanvas()
 	game.printLevelOne()
 	newPlayer.draw()
 	newPlayer.move()
 	requestID = window.requestAnimationFrame(animate)
+	stopAnimate()
 }
 
+function animateAfterDeath() {
+	clearCanvas()
+	newPlayer.draw()
+	newPlayer.move()
+	window.requestAnimationFrame(animateAfterDeath)
+}
+
+requestID
+
 function stopAnimate() {
-	// idk tbh
-	//console.log("stopAnimate called");
 	if(game.win === true || newPlayer.collision === true){
-		//console.log("stopAnimate called");
-		animationRunning = false
+		console.log("stopAnimate called");
+		//animationRunning = false
 		cancelAnimationFrame(requestID)
+		animateAfterDeath()
 	}
 }
 
@@ -28,12 +40,6 @@ function stopAnimate() {
 function clearCanvas() {
 	ctx.clearRect(0, 0, 600, 300)
 }
-
-//could you define a player area? or width and height areas?
-//this.rightEdge = this.xCord + this.width
-//this.bottomEdge = this.yCord - this.height
-
-//playerSquare.bottomEdge
 
 // CLASSES
 class Player {
@@ -181,6 +187,16 @@ const game = {
 	win: false,
 	winSquare: null,
 
+	playGame: function() {
+		game.setUpLevel()
+		animate()
+		if(this.win === true) {
+			this.score += 50
+			this.level++
+			console.log("hi");
+		}
+	},
+
 	setUpLevel: function() {
 		this.win = false
 		if(this.level === 1) {
@@ -237,14 +253,14 @@ const game = {
 		if(this.level === 1) {
 	 		this.winSquare = new Winner(550, 260, 40, 40)
 		}
-	 		this.winSquare.draw()
+	 	this.winSquare.draw()
 		
 	},
 
 	winGame() {
+		//this.score += 50
 		//console.log("win");
-		this.score = 50
-		stopAnimate()
+		//stopAnimate()
 		clearCanvas()
 		ctx.font = '20px Georgia'
 		ctx.fillStyle = "black"
@@ -253,22 +269,20 @@ const game = {
 
 	gameOver() {
 		//console.log("game over");
+		//this.lives--
 		if(lives === 0) {
-
+			//stopAnimate()
+			clearCanvas()
+			ctx.font = '20px Georgia'
+			ctx.fillStyle = "black"
+			ctx.fillText("u lose :(", 10, 50)
 		}
-		stopAnimate()
-		clearCanvas()
-		ctx.font = '20px Georgia'
-		ctx.fillStyle = "black"
-		ctx.fillText("u lose :(", 10, 50)
 	}
 
 }
 
 const newPlayer = new Player(10, 150)
-game.setUpLevel()
-animate()
-stopAnimate()
+game.playGame()
 
 // event listeners
 document.body.addEventListener('keydown', (event) => {
