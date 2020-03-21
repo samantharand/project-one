@@ -145,7 +145,7 @@ const game = {
 	lives: 3,
 	score: 0,
 	level: 1,
-	timer: 5,
+	timer: 6,
 	gravity: 0.3,
 	friction: .9,
 	canvas: {
@@ -222,15 +222,6 @@ const game = {
 				}
 			}
 	    }
-	   
-
-		// return this.collisionDirection
-		if(this.win === true) {
-			this.winGame()
-		} else if(newPlayer.collision === true) {
-			this.hit()
-		}
-
 	},
 
 	printWinSquare: function() {
@@ -252,11 +243,8 @@ const game = {
 	},
 
 	hit() {
-		//console.log("game over");
-		//this.lives--
 		newPlayer = new Player(10, 150)
 		if(lives === 0) {
-			//stopAnimate()
 			clearCanvas()
 			ctx.font = '20px Georgia'
 			ctx.fillStyle = "black"
@@ -281,7 +269,7 @@ function animate() {
 	newPlayer.draw()
 	newPlayer.move()
 	requestID = window.requestAnimationFrame(animate)
-	stats()
+	thingHappens()
 	if(game.timer === 0 || game.win === true || game.lives === 0) {
 		stopAnimate()
 	}
@@ -305,20 +293,33 @@ function stopAnimate() {
 	}
 }
 
-function stats() {
+function thingHappens() {
 	if(game.win === true) {
+		console.log("win");
 		game.score += 50
 		game.level++
-		//console.log(game.score);
+		game.winGame()
 		clearInterval(game.intervalID)
+		game.updateStats()
 		animateAfterDeath()
 	} else if(newPlayer.collision === true) {
+		clearCanvas("hit")
+		newPlayer.collision = false
 		game.lives--
+		game.hit()
+		game.updateStats()
 	} else if(game.timer === 0) {
+		game.timer = null
+		console.log("timer");
+		game.lives--
+		game.updateStats()
 		clearInterval(game.intervalID)
-		//game.lives--
+	} else if(game.lives === 0) {
+		console.log('lives = 0');
+		game.hit()
+		game.updateStats()
+		animateAfterDeath()
 	}
-	game.updateStats()	
 }
 
 // clears the whole canvas - used to prevent trailing
