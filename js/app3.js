@@ -242,9 +242,10 @@ const game = {
 		ctx.fillText("you win :)", 10, 50)
 	},
 
-	hit() {
+	lifeLost() {
 		newPlayer = new Player(10, 150)
-		if(lives === 0) {
+		if(this.lives === null) {
+			console.log("lifeLost lives = 0 should print u lose");
 			clearCanvas()
 			ctx.font = '20px Georgia'
 			ctx.fillStyle = "black"
@@ -303,21 +304,25 @@ function thingHappens() {
 		game.updateStats()
 		animateAfterDeath()
 	} else if(newPlayer.collision === true) {
-		clearCanvas("hit")
+		console.log("lifeLost");
 		newPlayer.collision = false
 		game.lives--
-		game.hit()
+		game.lifeLost()
 		game.updateStats()
 	} else if(game.timer === 0) {
-		game.timer = null
+		game.timer = 60
+		game.startTimer()
+		game.lifeLost()
 		console.log("timer");
 		game.lives--
 		game.updateStats()
 		clearInterval(game.intervalID)
 	} else if(game.lives === 0) {
 		console.log('lives = 0');
-		game.hit()
+		game.lives = null
 		game.updateStats()
+		clearInterval(game.intervalID)
+		game.lifeLost()
 		animateAfterDeath()
 	}
 }
