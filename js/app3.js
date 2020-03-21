@@ -11,7 +11,7 @@ let requestID;
 function animate() {
 	
 	clearCanvas()
-	game.printLevelOne()
+	game.printLevel()
 	newPlayer.draw()
 	newPlayer.move()
 	requestID = window.requestAnimationFrame(animate)
@@ -33,6 +33,13 @@ function stopAnimate() {
 		//animationRunning = false
 		cancelAnimationFrame(requestID)
 		animateAfterDeath()
+		if(game.win === true) {
+			game.score += 50
+			console.log(game.score);
+		} else if(newPlayer.collision === true) {
+			game.lives--
+		}
+		game.updateStats()
 	}
 }
 
@@ -174,7 +181,7 @@ const game = {
 	lives: 3,
 	score: 0,
 	level: 1,
-	timer: null,
+	timer: 60,
 	gravity: 0.3,
 	friction: .9,
 	canvas: {
@@ -206,7 +213,7 @@ const game = {
 		}
 	},
 
-	printLevelOne: function() {
+	printLevel: function() {
 
 		for(let i = 0; i < this.bricks.length; i++) {
 			this.bricks[i].draw()
@@ -277,12 +284,30 @@ const game = {
 			ctx.fillStyle = "black"
 			ctx.fillText("u lose :(", 10, 50)
 		}
+	},
+
+	updateStats() {
+		level.innerText = `${this.level}`
+		timer.innerText = `${this.timer}`
+		lives.innerText = `${this.lives}`
+		score.innerText = `${this.score}`
 	}
 
 }
 
+
+
+
+
+
 const newPlayer = new Player(10, 150)
 game.playGame()
+
+
+
+
+
+
 
 // event listeners
 document.body.addEventListener('keydown', (event) => {
