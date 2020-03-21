@@ -8,12 +8,6 @@ function animate() {
 	game.printLevelOne()
 	newPlayer.draw()
 	newPlayer.move()
-	//updateCanvas(playerSquare.direction)
-	//drawSquare()
-	//printWinBrick()
-	//drawBricks()
-	//testBrick.draw()
-	//testSpike.draw()
 	window.requestAnimationFrame(animate)
 }
 
@@ -87,7 +81,7 @@ class Player {
 		} else if(keyCode === 38) {
 			this.direction.up = true
 		} else {
-			//this.direction = null
+			this.direction = null
 		}
 	}
 
@@ -178,8 +172,8 @@ const game = {
 		if(this.level === 1) {
 			const brick1 = new Brick(300, 60, 40, 150)
 			this.bricks.push(brick1)
-			this.printWinSquare()
 		}
+			this.printWinSquare()
 
 	},
 
@@ -190,9 +184,8 @@ const game = {
 
 			this.collisionDetection(newPlayer, this.bricks[i])
 		}
-		
-		// this.printWinSquare()
-
+		this.printWinSquare()
+		this.collisionDetection(newPlayer, this.winSquare)
 	},
 
 	collisionDetection(playerSquare, brick) {
@@ -206,13 +199,19 @@ const game = {
 	      brick.yCord + brick.height > playerSquare.yCord) {  
 		   
 		    console.log("collision")
-		  	newPlayer.collision = true
+
+			if(brick === this.winSquare) {
+				this.win = true
+			} else {
+		  		newPlayer.collision = true
+			}
 	    }
 	   
 
 		// return this.collisionDirection
-
-		if(newPlayer.collision === true) {
+		if(this.win === true) {
+			this.winGame()
+		} else if(newPlayer.collision === true) {
 			this.gameOver()
 		}
 
@@ -221,14 +220,13 @@ const game = {
 	printWinSquare: function() {
 		if(this.level === 1) {
 	 		this.winSquare = new Winner(550, 260, 40, 40)
-	 		this.printWinSquare.color = 'rgb(255, 0, 0 , 0.5)'
-	 		//checkCollision(playerSquare, bricks[i])
 		}
-		this.winSquare.draw()
+	 		this.winSquare.draw()
+		
 	},
 
 	winGame() {
-		this.collisionDetection(newPlayer, )
+		console.log("win");
 	},
 
 	gameOver() {
