@@ -8,49 +8,6 @@ const score = document.querySelector('#score')
 
 let requestID;
 
-function animate() {
-	
-	clearCanvas()
-	game.printLevel()
-	newPlayer.draw()
-	newPlayer.move()
-	requestID = window.requestAnimationFrame(animate)
-	stopAnimate()
-}
-
-function animateAfterDeath() {
-	clearCanvas()
-	newPlayer.draw()
-	newPlayer.move()
-	window.requestAnimationFrame(animateAfterDeath)
-}
-
-requestID
-
-function stopAnimate() {
-	if(game.win === true || newPlayer.collision === true){
-		console.log("stopAnimate called");
-		//animationRunning = false
-		cancelAnimationFrame(requestID)
-		animateAfterDeath()
-		if(game.win === true) {
-			game.score += 50
-			game.level++
-			console.log(game.score);
-			clearInterval(game.intervalID)
-		} else if(newPlayer.collision === true) {
-			game.lives--
-		}
-		game.updateStats()
-	}
-
-}
-
-// clears the whole canvas - used to prevent trailing
-function clearCanvas() {
-	ctx.clearRect(0, 0, 600, 300)
-}
-
 // CLASSES
 class Player {
 	constructor(xCord, yCord) {
@@ -84,7 +41,7 @@ class Player {
 	}
 
 	stayOnScreen() {
-		if(this.collision === false) {
+		if(game.lives > 0) {
 			if(this.xCord + this.width >= game.canvas.width) {
 				this.xCord = game.canvas.width - this.width
 				this.velX = 0
@@ -188,7 +145,7 @@ const game = {
 	lives: 3,
 	score: 0,
 	level: 1,
-	timer: 60,
+	timer: 5,
 	gravity: 0.3,
 	friction: .9,
 	canvas: {
@@ -271,7 +228,7 @@ const game = {
 		if(this.win === true) {
 			this.winGame()
 		} else if(newPlayer.collision === true) {
-			this.gameOver()
+			this.hit()
 		}
 
 	},
@@ -294,9 +251,10 @@ const game = {
 		ctx.fillText("you win :)", 10, 50)
 	},
 
-	gameOver() {
+	hit() {
 		//console.log("game over");
 		//this.lives--
+		newPlayer = new Player(10, 150)
 		if(lives === 0) {
 			//stopAnimate()
 			clearCanvas()
@@ -315,18 +273,61 @@ const game = {
 
 }
 
+// EXTRA FUNCTIONS
 
+function animate() {
+	clearCanvas()
+	game.printLevel()
+	newPlayer.draw()
+	newPlayer.move()
+	requestID = window.requestAnimationFrame(animate)
+	stats()
+	if(game.timer === 0 || game.win === true || game.lives === 0) {
+		stopAnimate()
+	}
+}
 
+function animateAfterDeath() {
+	clearCanvas()
+	newPlayer.draw()
+	newPlayer.move()
+	window.requestAnimationFrame(animateAfterDeath)
+}
 
+requestID;
 
+function stopAnimate() {
+	if(game.win === true){
+		console.log("stopAnimate called");
+		//animationRunning = false
+		cancelAnimationFrame(requestID)
+		animateAfterDeath()
+	}
+}
 
-const newPlayer = new Player(10, 150)
+function stats() {
+	if(game.win === true) {
+		game.score += 50
+		game.level++
+		//console.log(game.score);
+		clearInterval(game.intervalID)
+		animateAfterDeath()
+	} else if(newPlayer.collision === true) {
+		game.lives--
+	} else if(game.timer === 0) {
+		clearInterval(game.intervalID)
+		//game.lives--
+	}
+	game.updateStats()	
+}
+
+// clears the whole canvas - used to prevent trailing
+function clearCanvas() {
+	ctx.clearRect(0, 0, 600, 300)
+}
+
+let newPlayer = new Player(10, 150)
 game.playGame()
-
-
-
-
-
 
 
 // event listeners
