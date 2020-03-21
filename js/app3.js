@@ -2,17 +2,22 @@ console.log("Hello Project 1 v3");
 
 const ctx = document.querySelector('#game-canvas').getContext('2d')
 
+let requestID;
+let animationRunning = false;
 
 function animate() {
+	animationRunning = true
 	clearCanvas()
 	game.printLevelOne()
 	newPlayer.draw()
 	newPlayer.move()
-	window.requestAnimationFrame(animate)
+	requestID = window.requestAnimationFrame(animate)
 }
 
 function stopAnimate() {
 	// idk tbh
+	animationRunning = false
+	cancelAnimationFrame(requestID)
 }
 
 // clears the whole canvas - used to prevent trailing
@@ -173,8 +178,6 @@ const game = {
 			const brick1 = new Brick(300, 60, 40, 150)
 			this.bricks.push(brick1)
 		}
-			this.printWinSquare()
-
 	},
 
 	printLevelOne: function() {
@@ -201,7 +204,9 @@ const game = {
 		    console.log("collision")
 
 			if(brick === this.winSquare) {
-				this.win = true
+				setTimeout(() => {	
+					this.win = true
+				}, 500)
 			} else {
 		  		newPlayer.collision = true
 			}
@@ -227,10 +232,18 @@ const game = {
 
 	winGame() {
 		console.log("win");
+		stopAnimate()
+		clearCanvas()
+		ctx.font = '20px Georgia'
+		ctx.fillText("Hello You WIN", 10, 50)
 	},
 
 	gameOver() {
 		console.log("game over");
+		stopAnimate()
+		clearCanvas()
+		ctx.font = '20px Georgia'
+		ctx.fillText("u lose :(", 10, 50)
 	}
 
 }
