@@ -135,8 +135,23 @@ class Brick {
 
 	draw() {
 		if(game.level === 1) {
-			clearCanvas()
 			ctx.fillStyle = "black"
+			ctx.fillRect(this.xCord, this.yCord, this.width, this.height)
+		}
+	}
+}
+
+class Winner {
+	constructor(xCord, yCord, width, height){
+		this.xCord = xCord
+		this.yCord = yCord
+		this.width = width
+		this.height = height
+	}
+
+	draw() {
+		if(game.level === 1) {
+			ctx.fillStyle = 'rgb(255, 0, 0 , 0.5)'
 			ctx.fillRect(this.xCord, this.yCord, this.width, this.height)
 		}
 	}
@@ -156,11 +171,14 @@ const game = {
 	},
 	bricks: [],
 	collisionDirection : null,
+	win: false,
+	winSquare: null,
 
 	setUpLevel: function() {
 		if(this.level === 1) {
-			const brick1 = new Brick(300, 150, 40, 150)
+			const brick1 = new Brick(300, 60, 40, 150)
 			this.bricks.push(brick1)
+			this.printWinSquare()
 		}
 
 	},
@@ -173,7 +191,7 @@ const game = {
 			this.collisionDetection(newPlayer, this.bricks[i])
 		}
 		
-		this.printWinSquare()
+		// this.printWinSquare()
 
 	},
 
@@ -197,32 +215,20 @@ const game = {
 		if(newPlayer.collision === true) {
 			this.gameOver()
 		}
-		// for(let i = 0; i < this.bricks.length; i++){
-		// 	if(this.collisionDirection === "left" || this.collisionDirection === "right") {
-		// 		newPlayer.velX = 0
-		// 		newPlayer.jumping = false
-		// 		newPlayer.grounded = true
-		// 		//console.log(this.collisionDirection);
-		// 	} else if (this.collisionDirection === "top") {
-		// 		newPlayer.grounded = true
-		// 		newPlayer.jumping = false
-		// 		//console.log(this.collisionDirection);
-		// 	} else if (this.collisionDirection === "bottom") {
-		// 		newPlayer.velY *= -1
-		// 		//console.log(this.collisionDirection);
-		// 	}
-		// }
 
 	},
 
 	printWinSquare: function() {
 		if(this.level === 1) {
-	 		ctx.fillStyle = 'rgb(255, 0, 0 , 0.5)'
-	 		ctx.fillRect(550, 260, 40, 40)
+	 		this.winSquare = new Winner(550, 260, 40, 40)
+	 		this.printWinSquare.color = 'rgb(255, 0, 0 , 0.5)'
 	 		//checkCollision(playerSquare, bricks[i])
 		}
+		this.winSquare.draw()
+	},
 
-
+	winGame() {
+		this.collisionDetection(newPlayer, )
 	},
 
 	gameOver() {
