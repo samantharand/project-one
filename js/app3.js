@@ -195,6 +195,7 @@ const game = {
 
 	startTimer() {
 		console.log("start timer called");
+		//clearInterval(game.intervalID)
 		this.intervalID = setInterval(() => {
 			this.timer--
 			this.score -= 2
@@ -294,7 +295,6 @@ const game = {
 	reset() {
 		cancelAnimationFrame(requestID)
 		cancelAnimationFrame(deadRequestID)
-		clearInterval(game.intervalID)
 		clearCanvas()
 		this.score = 360
 		this.lives = 3
@@ -311,6 +311,7 @@ const game = {
 		win.style.display = 'none'
 		lose.style.display = 'none'
 		statsBox.style.display = 'flex'
+		clearInterval(game.intervalID)
 		this.playGame()
 	}
 
@@ -322,7 +323,6 @@ function animate() {
 	cancelAnimationFrame(deadRequestID)
 	ctx.clearRect(0, 75, 600, 300)
 	game.printLevel()
-	//newStar.draw()
 	newPlayer.draw()
 	newPlayer.move()
 	requestID = window.requestAnimationFrame(animate)
@@ -375,7 +375,7 @@ function thingHappens() {
 	} else if(game.timer === 0) {
 		if(game.lives > 0 || game.lives === null) {
 			game.timer = 60
-			//game.startTimer()
+			game.startTimer()
 		}
 		game.lifeLost()
 		console.log("timer");
