@@ -210,9 +210,9 @@ const game = {
 		if(this.level === 1) {
 			const brick1 = new Brick(-1, 200, 20, 20)
 			const brick2 = new Brick(350, 200, 20, 200)
-			const brick3 = new Brick(50, 230, 20, 200)
-			const brick4 = new Brick(125, 150, 20, 70)
-			this.bricks.push(brick1, brick2, brick3, brick4)
+			const brick3 = new Brick(125, 215, 20, 70)
+			const brick4 = new Brick(50, 230, 20, 200)
+			this.bricks.push(brick1)
 		}
 	},
 
@@ -284,7 +284,11 @@ const game = {
 	},
 
 	reset() {
-		//cancelAnimationFrame(requestID)
+		cancelAnimationFrame(requestID)
+		cancelAnimationFrame(requestID)
+		cancelAnimationFrame(deadRequestID)
+		cancelAnimationFrame(deadRequestID)
+		console.log("This is deadRequestID\n", deadRequestID);
 		clearCanvas()
 		console.log("reset called");
 		this.lives = 3
@@ -310,6 +314,7 @@ const game = {
 // EXTRA FUNCTIONS
 
 function animate() {
+	cancelAnimationFrame(deadRequestID)
 	ctx.clearRect(0, 75, 600, 300)
 	game.printLevel()
 	//newStar.draw()
@@ -332,6 +337,7 @@ function animateAfterDeath() {
 	newPlayer.draw()
 	newPlayer.move()
 	deadRequestID = window.requestAnimationFrame(animateAfterDeath)
+	console.log(deadRequestID, "animateAfterDeath");
 }
 
 requestID;
@@ -342,6 +348,7 @@ function stopAnimate() {
 		console.log("stopAnimate called inside stopAnimate");
 		//animationRunning = false
 		cancelAnimationFrame(requestID)
+		console.log("this is the request ID, \n", requestID)
 		animateAfterDeath()
 	}
 }
@@ -406,6 +413,10 @@ document.body.addEventListener('keydown', (event) => {
 		console.log("down");
 		newPlayer.height = 10
 		newPlayer.yCord += 10
+		setTimeout(() => {
+			newPlayer.height = 20
+			//newPlayer.yCord -= 10
+		}, 500)
 	}
 });
 
