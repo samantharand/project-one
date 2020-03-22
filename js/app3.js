@@ -148,7 +148,7 @@ const game = {
 	lives: 3,
 	score: 0,
 	level: 1,
-	timer: 6,
+	timer: 60,
 	gravity: 0.3,
 	friction: .9,
 	canvas: {
@@ -235,7 +235,7 @@ const game = {
 		clearCanvas()
 		ctx.font = '20px Georgia'
 		ctx.fillStyle = "black"
-		ctx.fillText("you win :)", 10, 50)
+		ctx.fillText("level passed :)", 250, 50)
 	},
 
 	lifeLost() {
@@ -245,7 +245,7 @@ const game = {
 			clearCanvas()
 			ctx.font = '20px Georgia'
 			ctx.fillStyle = "black"
-			ctx.fillText("u lose :(", 10, 50)
+			ctx.fillText("u lose :(", 275, 50)
 		}
 	},
 
@@ -300,6 +300,7 @@ function thingHappens() {
 		win.style.display = 'flex'
 		statBox.style.display = 'none'
 		animateAfterDeath()
+		game.passLevel()
 	} else if(newPlayer.collision === true) {
 		console.log("lifeLost");
 		newPlayer.collision = false
@@ -325,15 +326,16 @@ function thingHappens() {
 		clearInterval(game.intervalID)
 		lose.style.display = 'flex'
 		statBox.style.display = 'none'
+		game.lifeLost()
 	}
 }
 
 // clears the whole canvas - used to prevent trailing
 function clearCanvas() {
-	ctx.clearRect(0, 0, 600, 300)
+	ctx.clearRect(0, 75, 600, 300)
 }
 
-let newPlayer = new Player(10, 150)
+let newPlayer = new Player(10, 100)
 game.playGame()
 
 
