@@ -14,12 +14,13 @@ const reset = document.querySelector('.reset')
 const credits = document.querySelector('#credits')
 const quit = document.querySelector('#quit')
 const winScore = document.querySelector('#winScore')
+
 let requestID;
 let deadRequestID;
+
 // CLASSES
 class Player {
 	constructor(xCord, yCord) {
-		this.strokeColor = "black"
 		this.height = 20
 		this.width = 20
 		this.xCord = xCord
@@ -43,7 +44,6 @@ class Player {
 	draw() {
 		if(game.level === 1) {
 			ctx.fillStyle = 'rgb(255, 0, 0 , 0.5)'
-			ctx.strokeStyle = this.strokeColor
 			ctx.fillRect(this.xCord, this.yCord, this.width, this.height)
 		}
 	}
@@ -264,7 +264,7 @@ const game = {
 		ctx.clearRect(0, 75, 600, 300)
 		ctx.font = '20px Arial'
 		ctx.fillStyle = "black"
-		ctx.fillText(`YOU WIN! Score: ${this.score}`, 200, 50)
+		ctx.fillText(`YOU WIN!`, 255, 50)
 		winScore.innerText = this.score
 		//canvas.style.background.src = "css/fireworks.gif"
 	},
