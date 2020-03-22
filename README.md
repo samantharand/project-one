@@ -14,4 +14,7 @@ General Assembly SEI Project 1
 - unsolved problems
 - forthcoming features
  -->
-## What is BLOK?
+## About BLOK?
+BLOK is a one level platformer game. Our user avoids the blocks and tries to make it to it's partner block on the other side.
+
+This is the first project for GA SEI Feb 2020 Cohort.
