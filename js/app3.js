@@ -11,7 +11,7 @@ const score = document.querySelector('#score')
 const win = document.querySelector('#win')
 const lose = document.querySelector('#lose')
 const reset = document.querySelector('.reset')
-const credits = document.querySelector('#credits')
+const credits = document.querySelector('.credits')
 const quit = document.querySelector('#quit')
 const winScore = document.querySelector('#winScore')
 
@@ -212,10 +212,11 @@ const game = {
 		if(this.level === 1) {
 			const brick1 = new Brick(-1, 200, 20, 20)
 			const brick2 = new Brick(65, 230, 20, 200)
-			const brick3 = new Brick(125, 215, 20, 70)
+			const brick3 = new Brick(125, 115, 20, 170)
 			const brick4 = new Brick(350, 200, 20, 200)
 			const brick5 = new Brick(450, 200, 20, 200)
-			//this.bricks.push(brick1, brick2, brick3, brick4, brick5)
+			const brick6 = new Brick(200, 205, 20, 100)
+			this.bricks.push(brick1, brick2, brick3, brick4, brick5, brick6)
 		}
 	},
 
@@ -273,10 +274,6 @@ const game = {
 		newPlayer = new Player(10, 250)
 		if(this.lives === null) {
 			console.log("lifeLost lives = 0 should print u lose");
-			ctx.clearRect(0, 75, 600, 300)
-			ctx.font = '20px Arial'
-			ctx.fillStyle = "black"
-			ctx.fillText("u lost :(", 275, 50)
 		}
 	},
 
@@ -414,10 +411,6 @@ document.body.addEventListener('keydown', (event) => {
 		console.log("down");
 		newPlayer.height = 10
 		newPlayer.yCord += 10
-		setTimeout(() => {
-			newPlayer.height = 20
-			//newPlayer.yCord -= 10
-		}, 500)
 	}
 });
 

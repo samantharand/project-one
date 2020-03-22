@@ -14,12 +14,31 @@ canvas {
 div {
 	display: flex;
 	justify-content: space-around;
+	align-items: center;
 	margin: 3px auto;
 	font-family: "arial";
 	background-color: white;
 	border: 2px solid black;
 	width: 600px;
 	height: 50px;
+}
+
+#contactBox, #menu {
+	display: flex;
+	justify-content: space-around;
+	flex-direction: column;
+	margin: 3px auto;
+	font-family: "arial";
+	background-color: white;
+	border: 2px solid black;
+	width: 600px;
+	height: 300px;
+}
+
+img {
+	width: 30px;
+	height: 30px;
+	display: inline;
 }
 
 #win {
