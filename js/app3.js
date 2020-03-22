@@ -13,7 +13,7 @@ const lose = document.querySelector('#lose')
 const reset = document.querySelector('.reset')
 const credits = document.querySelector('#credits')
 const quit = document.querySelector('#quit')
-
+const winScore = document.querySelector('#winScore')
 let requestID;
 let deadRequestID;
 // CLASSES
@@ -173,7 +173,7 @@ class Star {
 // GAME OBJECT
 const game = {
 	lives: 3,
-	score: this.timer,
+	score: 360,
 	level: 1,
 	timer: 60,
 	gravity: 0.4,
@@ -192,6 +192,7 @@ const game = {
 	startTimer() {
 		this.intervalID = setInterval(() => {
 			this.timer--
+			this.score -= 2
 			this.updateStats()
 		}, 1000)
 	},
@@ -214,7 +215,7 @@ const game = {
 			const brick3 = new Brick(125, 215, 20, 70)
 			const brick4 = new Brick(350, 200, 20, 200)
 			const brick5 = new Brick(450, 200, 20, 200)
-			this.bricks.push(brick1, brick2, brick3, brick4, brick5)
+			//this.bricks.push(brick1, brick2, brick3, brick4, brick5)
 		}
 	},
 
@@ -263,7 +264,8 @@ const game = {
 		ctx.clearRect(0, 75, 600, 300)
 		ctx.font = '20px Arial'
 		ctx.fillStyle = "black"
-		ctx.fillText("level passed :)", 250, 50)
+		ctx.fillText(`YOU WIN! Score: ${this.score}`, 200, 50)
+		winScore.innerText = this.score
 		//canvas.style.background.src = "css/fireworks.gif"
 	},
 
@@ -274,7 +276,7 @@ const game = {
 			ctx.clearRect(0, 75, 600, 300)
 			ctx.font = '20px Arial'
 			ctx.fillStyle = "black"
-			ctx.fillText("u lose :(", 275, 50)
+			ctx.fillText("u lost :(", 275, 50)
 		}
 	},
 
@@ -282,7 +284,7 @@ const game = {
 		//level.innerText = `${this.level}`
 		timer.innerText = `${this.timer}`
 		lives.innerText = `${this.lives}`
-		score.innerText = `${this.timer * 2}`
+		score.innerText = `${this.score}`
 	},
 
 	reset() {
@@ -291,7 +293,7 @@ const game = {
 		console.log("This is deadRequestID\n", deadRequestID);
 		clearCanvas()
 		console.log("reset called");
-		this.score = this.timer
+		this.score = 360
 		this.lives = 3
 		this.timer = 60
 		this.bricks = []
@@ -356,7 +358,6 @@ function stopAnimate() {
 function thingHappens() {
 	if(game.win === true) {
 		console.log("win");
-		game.score += 50
 		game.updateStats()
 		clearInterval(game.intervalID)
 		win.style.display = 'flex'
