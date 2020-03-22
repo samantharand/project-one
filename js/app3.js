@@ -9,6 +9,9 @@ const lives = document.querySelector('#lives')
 const score = document.querySelector('#score')
 const win = document.querySelector('#win')
 const lose = document.querySelector('#lose')
+const reset = document.querySelector('.reset')
+const nextLevel = document.querySelector('#nextLevel')
+const quit = document.querySelector('#quit')
 
 let requestID;
 
@@ -143,6 +146,17 @@ class Winner {
 	}
 }
 
+/////////
+
+class star {
+	draw() {
+		if(game.level === 1) {
+			ctx.fillStyle = 'yellow'
+			
+		}	
+	}
+}
+
 // GAME OBJECT
 const game = {
 	lives: 3,
@@ -267,6 +281,11 @@ function animate() {
 	newPlayer.move()
 	requestID = window.requestAnimationFrame(animate)
 	thingHappens()
+	if(game.timer <= 10) {
+		timer.style.color = "red"
+	} else {
+		timer.style.color = "black"
+	}
 	if(game.timer === 0 || game.win === true || game.lives === 0) {
 		stopAnimate()
 	}
@@ -294,7 +313,6 @@ function thingHappens() {
 	if(game.win === true) {
 		console.log("win");
 		game.score += 50
-		game.level++
 		clearInterval(game.intervalID)
 		game.updateStats()
 		win.style.display = 'flex'
@@ -338,7 +356,6 @@ function clearCanvas() {
 let newPlayer = new Player(10, 100)
 game.playGame()
 
-
 // event listeners
 document.body.addEventListener('keydown', (event) => {
 	if(event.keyCode === 37) {
@@ -362,4 +379,12 @@ document.body.addEventListener("keyup", (event) => {
 
 document.body.addEventListener("click", (event) => {
 	console.log(event);
+	if(event.target.innerText === "reset") {
+		ctx.clearRect(0, 0, 600, 300)
+		animate()
+		console.log("reset");
+	} else if(event.target.innerText === "next level") {
+		console.log("next level");
+		game.level++
+	}
 })
