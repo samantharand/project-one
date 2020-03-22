@@ -460,6 +460,7 @@ document.body.addEventListener("click", (event) => {
 		creditsBox.style.display = "none";
 		canvas.style.display = "none"
 		menu.style.display = "flex";
+		game.reset()
 		game.playGame()
 	}
 })
