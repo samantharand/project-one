@@ -173,7 +173,7 @@ class Star {
 // GAME OBJECT
 const game = {
 	lives: 3,
-	score: 0,
+	score: this.timer,
 	level: 1,
 	timer: 60,
 	gravity: 0.4,
@@ -197,6 +197,7 @@ const game = {
 	},
 
 	playGame: function() {
+		this.updateStats()
 		cancelAnimationFrame(deadRequestID)
 		cancelAnimationFrame(requestID)
 		this.startTimer()
@@ -209,10 +210,11 @@ const game = {
 		this.lose = false
 		if(this.level === 1) {
 			const brick1 = new Brick(-1, 200, 20, 20)
-			const brick2 = new Brick(350, 200, 20, 200)
+			const brick2 = new Brick(65, 230, 20, 200)
 			const brick3 = new Brick(125, 215, 20, 70)
-			const brick4 = new Brick(50, 230, 20, 200)
-			this.bricks.push(brick1)
+			const brick4 = new Brick(350, 200, 20, 200)
+			const brick5 = new Brick(450, 200, 20, 200)
+			this.bricks.push(brick1, brick2, brick3, brick4, brick5)
 		}
 	},
 
@@ -280,20 +282,18 @@ const game = {
 		//level.innerText = `${this.level}`
 		timer.innerText = `${this.timer}`
 		lives.innerText = `${this.lives}`
-		score.innerText = `${this.score}`
+		score.innerText = `${this.timer * 2}`
 	},
 
 	reset() {
 		cancelAnimationFrame(requestID)
-		cancelAnimationFrame(requestID)
-		cancelAnimationFrame(deadRequestID)
 		cancelAnimationFrame(deadRequestID)
 		console.log("This is deadRequestID\n", deadRequestID);
 		clearCanvas()
 		console.log("reset called");
+		this.score = this.timer
 		this.lives = 3
 		this.timer = 60
-		this.score = 0
 		this.bricks = []
 		this.win = false
 		this.lose = false
