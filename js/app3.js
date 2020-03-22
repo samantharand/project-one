@@ -401,7 +401,6 @@ function clearCanvas() {
 
 let newPlayer = new Player(10, 250)
 let newStar = new Star()
-// game.playGame()
 
 // event listeners
 document.body.addEventListener('keydown', (event) => {
@@ -415,6 +414,10 @@ document.body.addEventListener('keydown', (event) => {
 		console.log("down");
 		newPlayer.height = 10
 		newPlayer.yCord += 10
+	} else if(event.keyCode === 32) {
+		if(canvas.style.display === "block") {
+			game.reset()
+		}
 	}
 });
 
@@ -449,6 +452,8 @@ document.body.addEventListener("click", (event) => {
 		game.playGame()
 	} else if(event.target.innerText === "menu") {
 		statsBox.style.display = "none";
+		lose.style.display = "none";
+		win.style.display = "none";
 		lose.style.display = "none";
 		win.style.display = "none";
 		creditsBox.style.display = "none";
