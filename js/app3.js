@@ -2,7 +2,7 @@ console.log("Hello Project 1 v3");
 
 const canvas = document.querySelector('#game-canvas')
 const ctx = document.querySelector('#game-canvas').getContext('2d')
-const statBox = document.querySelector('#statsBox')
+const statsBox = document.querySelector('#statsBox')
 const stats = document.querySelector('.stats')
 const level = document.querySelector('#level')
 const timer = document.querySelector('#timer')
@@ -14,6 +14,10 @@ const reset = document.querySelector('.reset')
 const credits = document.querySelector('.credits')
 const quit = document.querySelector('#quit')
 const winScore = document.querySelector('#winScore')
+const menu = document.querySelector('#menu')
+const start = document.querySelector('#start')
+const creditsBox = document.querySelector('#creditsBox')
+const mainMenu = document.querySelector(".mainMenu")
 
 let requestID;
 let deadRequestID;
@@ -304,7 +308,7 @@ const game = {
 		newPlayer.yCord = 250
 		win.style.display = 'none'
 		lose.style.display = 'none'
-		statBox.style.display = 'flex'
+		statsBox.style.display = 'flex'
 		this.playGame()
 	}
 
@@ -358,7 +362,7 @@ function thingHappens() {
 		game.updateStats()
 		clearInterval(game.intervalID)
 		win.style.display = 'flex'
-		statBox.style.display = 'none'
+		statsBox.style.display = 'none'
 		game.passLevel()
 		animateAfterDeath()
 	} else if(newPlayer.collision === true) {
@@ -385,7 +389,7 @@ function thingHappens() {
 		animateAfterDeath()
 		clearInterval(game.intervalID)
 		lose.style.display = 'flex'
-		statBox.style.display = 'none'
+		statsBox.style.display = 'none'
 		game.lifeLost()
 	}
 }
@@ -397,7 +401,7 @@ function clearCanvas() {
 
 let newPlayer = new Player(10, 250)
 let newStar = new Star()
-game.playGame()
+// game.playGame()
 
 // event listeners
 document.body.addEventListener('keydown', (event) => {
@@ -431,6 +435,25 @@ document.body.addEventListener("click", (event) => {
 	if(event.target.innerText === "reset") {
 		game.reset()
 	} else if(event.target.innerText === "credits") {
-		console.log("credits");
+		statsBox.style.display = "none";
+		lose.style.display = "none";
+		win.style.display = "none";
+		menu.style.display = "none";
+		canvas.style.display = "none";
+		creditsBox.style.display = "flex";
+	} else if(event.target.innerText === "start") {
+		menu.style.display = "none";
+		statsBox.style.display = "block"
+		canvas.style.display = "block"
+		game.reset()
+		game.playGame()
+	} else if(event.target.innerText === "menu") {
+		statsBox.style.display = "none";
+		lose.style.display = "none";
+		win.style.display = "none";
+		creditsBox.style.display = "none";
+		canvas.style.display = "none"
+		menu.style.display = "flex";
+		game.playGame()
 	}
 })
