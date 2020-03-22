@@ -1,5 +1,6 @@
 console.log("Hello Project 1 v3");
 
+const canvas = document.querySelector('#game-canvas')
 const ctx = document.querySelector('#game-canvas').getContext('2d')
 const statBox = document.querySelector('#statsBox')
 const stats = document.querySelector('.stats')
@@ -10,17 +11,17 @@ const score = document.querySelector('#score')
 const win = document.querySelector('#win')
 const lose = document.querySelector('#lose')
 const reset = document.querySelector('.reset')
-const nextLevel = document.querySelector('#nextLevel')
+const credits = document.querySelector('#credits')
 const quit = document.querySelector('#quit')
 
 let requestID;
-
+let deadRequestID;
 // CLASSES
 class Player {
 	constructor(xCord, yCord) {
 		this.strokeColor = "black"
-		this.height = 40
-		this.width = 40
+		this.height = 20
+		this.width = 20
 		this.xCord = xCord
 		this.yCord = yCord
 		this.rightEdge = this.xCord + this.width
@@ -43,7 +44,7 @@ class Player {
 		if(game.level === 1) {
 			ctx.fillStyle = 'rgb(255, 0, 0 , 0.5)'
 			ctx.strokeStyle = this.strokeColor
-			ctx.fillRect(this.xCord, this.yCord, 40, 40)
+			ctx.fillRect(this.xCord, this.yCord, this.width, this.height)
 		}
 	}
 
@@ -122,7 +123,7 @@ class Brick {
 	draw() {
 		if(game.level === 1) {
 			ctx.strokeStyle = "black"
-			ctx.lineWidth = 3
+			ctx.lineWidth = 2
 			ctx.strokeRect(this.xCord, this.yCord, this.width, this.height)
 		}
 	}
@@ -148,33 +149,45 @@ class Winner {
 
 /////////
 
-class star {
+class Star {
 	draw() {
 		if(game.level === 1) {
-			ctx.fillStyle = 'yellow'
-			
+			ctx.fillStyle = 'gold'
+			//ctx.fillRect(100, 100, 20, 20)
+			ctx.beginPath()
+			ctx.moveTo(330.0, 200)
+			ctx.lineTo(335.0, 215.0)
+			ctx.lineTo(350.0, 210.0)
+			ctx.lineTo(337.5, 220.0)
+			ctx.lineTo(350.0, 240.0)
+			ctx.lineTo(330.0, 230.0)
+			ctx.lineTo(300, 240.0)
+			ctx.lineTo(317.5, 220.0)
+			ctx.lineTo(300, 210.0)
+			ctx.lineTo(320.0, 215.0)
+			ctx.closePath()
+			ctx.fill()
 		}	
 	}
 }
-
 // GAME OBJECT
 const game = {
 	lives: 3,
 	score: 0,
 	level: 1,
 	timer: 60,
-	gravity: 0.3,
+	gravity: 0.4,
 	friction: .9,
 	canvas: {
 		height: 300,
 		width: 600,
 	},
 	bricks: [],
-	collisionDirection : null,
 	lose: false,
 	win: false,
 	winSquare: null,
 	intervalID: null,
+	bonus: false,
 
 	startTimer() {
 		this.intervalID = setInterval(() => {
@@ -184,6 +197,8 @@ const game = {
 	},
 
 	playGame: function() {
+		cancelAnimationFrame(deadRequestID)
+		cancelAnimationFrame(requestID)
 		this.startTimer()
 		this.setUpLevel()
 		animate()
@@ -191,14 +206,13 @@ const game = {
 
 	setUpLevel: function() {
 		this.win = false
+		this.lose = false
 		if(this.level === 1) {
-			const brick1 = new Brick(350, 200, 40, 200)
-			const brick2 = new Brick(150, 230, 40, 200)
-			this.bricks.push(brick1, brick2)
-		} else if(this.level === 2) {
-			const brick1 = new Brick(350, 400, 40, 200)
-			const brick2 = new Brick(150, 230, 40, 200)
-			this.bricks.push(brick1, brick2)
+			const brick1 = new Brick(-1, 200, 20, 20)
+			const brick2 = new Brick(350, 200, 20, 200)
+			const brick3 = new Brick(50, 230, 20, 200)
+			const brick4 = new Brick(125, 150, 20, 70)
+			this.bricks.push(brick1, brick2, brick3, brick4)
 		}
 	},
 
@@ -237,37 +251,58 @@ const game = {
 	},
 
 	printWinSquare: function() {
-		if(this.level === 1) {
-	 		this.winSquare = new Winner(550, 260, 40, 40)
-		}
+	 	this.winSquare = new Winner(550, 280, 20, 20)
 	 	this.winSquare.draw()
 		
 	},
 
 	passLevel() {
 		console.log("passLevel");
-		clearCanvas()
-		ctx.font = '20px Georgia'
+		ctx.clearRect(0, 75, 600, 300)
+		ctx.font = '20px Arial'
 		ctx.fillStyle = "black"
 		ctx.fillText("level passed :)", 250, 50)
+		//canvas.style.background.src = "css/fireworks.gif"
 	},
 
 	lifeLost() {
-		newPlayer = new Player(10, 150)
+		newPlayer = new Player(10, 250)
 		if(this.lives === null) {
 			console.log("lifeLost lives = 0 should print u lose");
-			clearCanvas()
-			ctx.font = '20px Georgia'
+			ctx.clearRect(0, 75, 600, 300)
+			ctx.font = '20px Arial'
 			ctx.fillStyle = "black"
 			ctx.fillText("u lose :(", 275, 50)
 		}
 	},
 
 	updateStats() {
-		level.innerText = `${this.level}`
+		//level.innerText = `${this.level}`
 		timer.innerText = `${this.timer}`
 		lives.innerText = `${this.lives}`
 		score.innerText = `${this.score}`
+	},
+
+	reset() {
+		//cancelAnimationFrame(requestID)
+		clearCanvas()
+		console.log("reset called");
+		this.lives = 3
+		this.timer = 60
+		this.score = 0
+		this.bricks = []
+		this.win = false
+		this.lose = false
+		newPlayer.collision = false
+		newPlayer.vel = 0
+		newPlayer.velY = 0
+		newPlayer.speed = 5
+		newPlayer.xCord = 10
+		newPlayer.yCord = 250
+		win.style.display = 'none'
+		lose.style.display = 'none'
+		statBox.style.display = 'flex'
+		this.playGame()
 	}
 
 }
@@ -275,8 +310,9 @@ const game = {
 // EXTRA FUNCTIONS
 
 function animate() {
-	clearCanvas()
+	ctx.clearRect(0, 75, 600, 300)
 	game.printLevel()
+	//newStar.draw()
 	newPlayer.draw()
 	newPlayer.move()
 	requestID = window.requestAnimationFrame(animate)
@@ -292,13 +328,14 @@ function animate() {
 }
 
 function animateAfterDeath() {
-	clearCanvas()
+	ctx.clearRect(0, 75, 600, 300)
 	newPlayer.draw()
 	newPlayer.move()
-	window.requestAnimationFrame(animateAfterDeath)
+	deadRequestID = window.requestAnimationFrame(animateAfterDeath)
 }
 
 requestID;
+deadRequestID;
 
 function stopAnimate() {
 	if(game.win === true){
@@ -313,12 +350,12 @@ function thingHappens() {
 	if(game.win === true) {
 		console.log("win");
 		game.score += 50
-		clearInterval(game.intervalID)
 		game.updateStats()
+		clearInterval(game.intervalID)
 		win.style.display = 'flex'
 		statBox.style.display = 'none'
-		animateAfterDeath()
 		game.passLevel()
+		animateAfterDeath()
 	} else if(newPlayer.collision === true) {
 		console.log("lifeLost");
 		newPlayer.collision = false
@@ -350,10 +387,11 @@ function thingHappens() {
 
 // clears the whole canvas - used to prevent trailing
 function clearCanvas() {
-	ctx.clearRect(0, 75, 600, 300)
+	ctx.clearRect(0, 0, 600, 300)
 }
 
-let newPlayer = new Player(10, 100)
+let newPlayer = new Player(10, 250)
+let newStar = new Star()
 game.playGame()
 
 // event listeners
@@ -364,6 +402,10 @@ document.body.addEventListener('keydown', (event) => {
 		newPlayer.setDirection(39)
 	} else if (event.keyCode === 38) {
 		newPlayer.setDirection(38)
+	} else if(event.keyCode === 40) {
+		console.log("down");
+		newPlayer.height = 10
+		newPlayer.yCord += 10
 	}
 });
 
@@ -374,17 +416,16 @@ document.body.addEventListener("keyup", (event) => {
 		newPlayer.unsetDirection(39)
 	} else if (event.keyCode === 38) {
 		newPlayer.unsetDirection(38)
+	} else if(event.keyCode === 40) {
+		newPlayer.height = 20
 	}
 })
 
 document.body.addEventListener("click", (event) => {
-	console.log(event);
+	//console.log(event);
 	if(event.target.innerText === "reset") {
-		ctx.clearRect(0, 0, 600, 300)
-		animate()
-		console.log("reset");
-	} else if(event.target.innerText === "next level") {
-		console.log("next level");
-		game.level++
+		game.reset()
+	} else if(event.target.innerText === "credits") {
+		console.log("credits");
 	}
 })
