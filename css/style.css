@@ -45,12 +45,27 @@ div {
 	justify-content: center;
 }
 
-img {
+.socials {
 	width: 30px;
 	height: 30px;
 	margin: 3px;
 }
 
+#howToPlay {
+	display: none;
+	flex-direction: column;
+	background-color: white;
+	border: 2px solid black;
+	width: 600px;
+	height: 300px;
+}
+
+.buttons {
+	display: flex;
+	border: none;
+	flex-direction: row;
+	align-items: space-around;
+}
 
 #win {
 	display: none;

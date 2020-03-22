@@ -15,9 +15,10 @@ const credits = document.querySelector('.credits')
 const quit = document.querySelector('#quit')
 const winScore = document.querySelector('#winScore')
 const menu = document.querySelector('#menu')
-const start = document.querySelector('#start')
+const start = document.querySelector('.start')
 const creditsBox = document.querySelector('#creditsBox')
 const mainMenu = document.querySelector(".mainMenu")
+const howToPlay =  document.querySelector("#howToPlay")
 
 let requestID;
 let deadRequestID;
@@ -444,10 +445,12 @@ document.body.addEventListener("click", (event) => {
 		win.style.display = "none";
 		menu.style.display = "none";
 		canvas.style.display = "none";
+		howToPlay.style.display = "none"
 		creditsBox.style.display = "flex";
 	} else if(event.target.innerText === "start") {
 		menu.style.display = "none";
 		statsBox.style.display = "block"
+		howToPlay.style.display = "none"
 		canvas.style.display = "block"
 		game.reset()
 		game.playGame()
@@ -461,7 +464,18 @@ document.body.addEventListener("click", (event) => {
 		win.style.display = "none";
 		creditsBox.style.display = "none";
 		canvas.style.display = "none"
+		howToPlay.style.display = "none"
 		menu.style.display = "flex";
 		game.playGame()
+	} else if (event.target.innerText === "how to play") {
+		statsBox.style.display = "none";
+		lose.style.display = "none";
+		win.style.display = "none";
+		lose.style.display = "none";
+		win.style.display = "none";
+		creditsBox.style.display = "none";
+		canvas.style.display = "none"
+		menu.style.display = "none";
+		howToPlay.style.display = "flex"
 	}
 })
