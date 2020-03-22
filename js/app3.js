@@ -452,6 +452,8 @@ document.body.addEventListener("click", (event) => {
 		game.reset()
 		game.playGame()
 	} else if(event.target.innerText === "menu") {
+		console.log('menu');
+		game.reset()
 		statsBox.style.display = "none";
 		lose.style.display = "none";
 		win.style.display = "none";
@@ -460,7 +462,6 @@ document.body.addEventListener("click", (event) => {
 		creditsBox.style.display = "none";
 		canvas.style.display = "none"
 		menu.style.display = "flex";
-		game.reset()
 		game.playGame()
 	}
 })
