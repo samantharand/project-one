@@ -7,11 +7,19 @@ canvas {
 	border: 3px solid black;
 }
 
-#stats {
+div {
 	font-family: "arial";
 	display: flex;
 	justify-content: space-around;
 	background-color: white;
 	border: 3px solid black;
 	width: 600px;
+}
+
+#win {
+	display: none;
+}
+
+#lose {
+	display: none;
 }

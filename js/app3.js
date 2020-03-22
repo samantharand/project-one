@@ -1,10 +1,14 @@
 console.log("Hello Project 1 v3");
 
 const ctx = document.querySelector('#game-canvas').getContext('2d')
+const statBox = document.querySelector('#statsBox')
+const stats = document.querySelector('.stats')
 const level = document.querySelector('#level')
 const timer = document.querySelector('#timer')
 const lives = document.querySelector('#lives')
 const score = document.querySelector('#score')
+const win = document.querySelector('#win')
+const lose = document.querySelector('#lose')
 
 let requestID;
 
@@ -57,7 +61,6 @@ class Player {
 	}
 
 	setDirection(keyCode) {
-		console.log("setDirection");
 		if(keyCode === 37) {
 			this.direction.left = true
 		} else if(keyCode === 39) {
@@ -170,11 +173,6 @@ const game = {
 		this.startTimer()
 		this.setUpLevel()
 		animate()
-		if(this.win === true) {
-			this.score += 50
-			this.level++
-			console.log("hi");
-		}
 	},
 
 	setUpLevel: function() {
@@ -232,10 +230,8 @@ const game = {
 		
 	},
 
-	winGame() {
-		//this.score += 50
-		//console.log("win");
-		//stopAnimate()
+	passLevel() {
+		console.log("passLevel");
 		clearCanvas()
 		ctx.font = '20px Georgia'
 		ctx.fillStyle = "black"
@@ -287,7 +283,7 @@ requestID;
 
 function stopAnimate() {
 	if(game.win === true){
-		console.log("stopAnimate called");
+		console.log("stopAnimate called inside stopAnimate");
 		//animationRunning = false
 		cancelAnimationFrame(requestID)
 		animateAfterDeath()
@@ -299,9 +295,10 @@ function thingHappens() {
 		console.log("win");
 		game.score += 50
 		game.level++
-		game.winGame()
 		clearInterval(game.intervalID)
 		game.updateStats()
+		win.style.display = 'flex'
+		statBox.style.display = 'none'
 		animateAfterDeath()
 	} else if(newPlayer.collision === true) {
 		console.log("lifeLost");
@@ -310,8 +307,10 @@ function thingHappens() {
 		game.lifeLost()
 		game.updateStats()
 	} else if(game.timer === 0) {
-		game.timer = 60
-		game.startTimer()
+		if(game.lives > 0 || game.lives === null) {
+			game.timer = 60
+			game.startTimer()
+		}
 		game.lifeLost()
 		console.log("timer");
 		game.lives--
@@ -321,9 +320,11 @@ function thingHappens() {
 		console.log('lives = 0');
 		game.lives = null
 		game.updateStats()
-		clearInterval(game.intervalID)
 		game.lifeLost()
 		animateAfterDeath()
+		clearInterval(game.intervalID)
+		lose.style.display = 'flex'
+		statBox.style.display = 'none'
 	}
 }
 
