@@ -18,3 +18,12 @@ General Assembly SEI Project 1
 BLOK is a one level platformer game. Our user avoids the blocks and tries to make it to it's partner block on the other side.
 
 This is the first project for GA SEI Feb 2020 Cohort.
+
+## Wireframes
+
+<!-- add later -->
+
+## User Stories
+
+* User is presented with the menu screen and given the option to 
+...*fghjk
