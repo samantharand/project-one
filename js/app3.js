@@ -194,6 +194,7 @@ const game = {
 	bonus: false,
 
 	startTimer() {
+		console.log("start timer called");
 		this.intervalID = setInterval(() => {
 			this.timer--
 			this.score -= 2
@@ -203,6 +204,7 @@ const game = {
 
 	playGame: function() {
 		this.updateStats()
+		clearInterval(game.intervalID)
 		cancelAnimationFrame(deadRequestID)
 		cancelAnimationFrame(requestID)
 		this.startTimer()
@@ -220,7 +222,8 @@ const game = {
 			const brick4 = new Brick(350, 200, 20, 200)
 			const brick5 = new Brick(450, 200, 20, 200)
 			const brick6 = new Brick(200, 205, 20, 100)
-			this.bricks.push(brick1, brick2, brick3, brick4, brick5, brick6)
+			const brick7 = new Brick(260, 265, 50, 20)
+			this.bricks.push(brick1, brick2, brick3, brick4, brick5, brick6, brick7)
 		}
 	},
 
@@ -291,9 +294,8 @@ const game = {
 	reset() {
 		cancelAnimationFrame(requestID)
 		cancelAnimationFrame(deadRequestID)
-		console.log("This is deadRequestID\n", deadRequestID);
+		clearInterval(game.intervalID)
 		clearCanvas()
-		console.log("reset called");
 		this.score = 360
 		this.lives = 3
 		this.timer = 60
@@ -366,7 +368,6 @@ function thingHappens() {
 		game.passLevel()
 		animateAfterDeath()
 	} else if(newPlayer.collision === true) {
-		console.log("lifeLost");
 		newPlayer.collision = false
 		game.lives--
 		game.lifeLost()
@@ -374,7 +375,7 @@ function thingHappens() {
 	} else if(game.timer === 0) {
 		if(game.lives > 0 || game.lives === null) {
 			game.timer = 60
-			game.startTimer()
+			//game.startTimer()
 		}
 		game.lifeLost()
 		console.log("timer");

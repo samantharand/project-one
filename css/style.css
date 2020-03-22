@@ -39,10 +39,16 @@ div {
 	display: none;
 }
 
+#images {
+	display: flex;
+	border: none;
+	justify-content: center;
+}
+
 img {
 	width: 30px;
 	height: 30px;
-	display: inline;
+	margin: 3px;
 }
 
 
@@ -59,9 +65,14 @@ img {
 #statsBox {
 	display: none;
 }
+
 button {
 	height: 25px;
 	border: 1px solid black;
 	padding: 3px 5px;
 	box-shadow: -2px 2px black;
 }
+
+
+
+
