@@ -35,7 +35,13 @@ This is the first project for GA SEI Feb 2020 Cohort.
 * Clicking reset allows the user to reset all their stats.
 * If the user reaches their pair square they they are presented with the win screen which displays their score and gives them the option to reset the game or view the credits. They can also moves around on the screen as much as they want after winning.
 
+## Tech Used
 
+* HTML
+* CSS
+* JavaScript
+
+## Approaches Taken
 
 
 
