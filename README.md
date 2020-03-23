@@ -8,7 +8,8 @@ This is the first project for GA SEI Feb 2020 Cohort.
 
 ## Wireframes
 
-<!-- add later -->
+General Level Layout
+(wireframes_levels.jpg)
 
 ## User Stories
 
