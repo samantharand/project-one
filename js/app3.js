@@ -97,7 +97,7 @@ class Player {
 	}
 
 	move() {
-		//console.log(this.direction);
+		////console.log(this.direction);
 		if(this.direction.left === true && this.velX > -this.speed) {
 			this.velX--
 		} else if (this.direction.right === true && this.velX < this.speed) {
@@ -200,7 +200,7 @@ const game = {
 	bonus: false,
 
 	startTimer() {
-		console.log("start timer called");
+		//////console.log("start timer called");
 		//clearInterval(game.intervalID)
 		this.intervalID = setInterval(() => {
 			this.timer--
@@ -255,7 +255,7 @@ const game = {
 	      // the brick's bottom edge is below my top edge
 	      brick.yCord + brick.height > playerSquare.yCord) {  
 		   
-		    //console.log("collision")
+		    //////console.log("collision")
 			if(this.win === false) {			
 				if(brick === this.winSquare) {
 					setTimeout(() => {	
@@ -275,7 +275,7 @@ const game = {
 	},
 
 	passLevel() {
-		console.log("passLevel");
+		////console.log("passLevel");
 		ctx.clearRect(0, 75, 600, 300)
 		ctx.font = '20px Arial'
 		ctx.fillStyle = "black"
@@ -287,7 +287,7 @@ const game = {
 	lifeLost() {
 		newPlayer = new Player(10, 250)
 		if(this.lives === null) {
-			console.log("lifeLost lives = 0 should print u lose");
+			//console.log("lifeLost lives = 0 should print u lose");
 		}
 	},
 
@@ -348,7 +348,7 @@ function animateAfterDeath() {
 	newPlayer.draw()
 	newPlayer.move()
 	deadRequestID = window.requestAnimationFrame(animateAfterDeath)
-	console.log(deadRequestID, "animateAfterDeath");
+	//console.log(deadRequestID, "animateAfterDeath");
 }
 
 requestID;
@@ -356,17 +356,17 @@ deadRequestID;
 
 function stopAnimate() {
 	if(game.win === true){
-		console.log("stopAnimate called inside stopAnimate");
+		//console.log("stopAnimate called inside stopAnimate");
 		//animationRunning = false
 		cancelAnimationFrame(requestID)
-		console.log("this is the request ID, \n", requestID)
+		//console.log("this is the request ID, \n", requestID)
 		animateAfterDeath()
 	}
 }
 
 function thingHappens() {
 	if(game.win === true) {
-		console.log("win");
+		//console.log("win");
 		game.updateStats()
 		clearInterval(game.intervalID)
 		win.style.display = 'flex'
@@ -384,12 +384,12 @@ function thingHappens() {
 			game.startTimer()
 		}
 		game.lifeLost()
-		console.log("timer");
+		//console.log("timer");
 		game.lives--
 		game.updateStats()
 		clearInterval(game.intervalID)
 	} else if(game.lives === 0) {
-		console.log('lives = 0');
+		//console.log('lives = 0');
 		game.lives = null
 		game.updateStats()
 		game.lifeLost()
@@ -418,7 +418,7 @@ document.body.addEventListener('keydown', (event) => {
 	} else if (event.keyCode === 38) {
 		newPlayer.setDirection(38)
 	} else if(event.keyCode === 40) {
-		console.log("down");
+		//console.log("down");
 		newPlayer.height = 10
 		newPlayer.yCord += 10
 	} else if(event.keyCode === 32) {
@@ -441,7 +441,7 @@ document.body.addEventListener("keyup", (event) => {
 })
 
 document.body.addEventListener("click", (event) => {
-	//console.log(event);
+	////console.log(event);
 	if(event.target.innerText === "reset") {
 		game.reset()
 	} else if(event.target.innerText === "credits") {
@@ -460,7 +460,6 @@ document.body.addEventListener("click", (event) => {
 		game.reset()
 		game.playGame()
 	} else if(event.target.innerText === "menu") {
-		console.log('menu');
 		game.reset()
 		statsBox.style.display = "none";
 		lose.style.display = "none";
