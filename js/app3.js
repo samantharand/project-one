@@ -44,7 +44,7 @@ class Player {
 		this.jumping = false
 		this.grounded = false
 		this.collision = false
-		let color = ["red", "blue", 'yellow']
+		let color = ['rgb(255, 0, 0, 0.5)', 'rgb(0, 0, 255, 0.5)', 'rgb(255, 196, 0, 0.5)']
 		let randomNum = Math.floor(Math.random() * 3)
 		this.fillStyle = color[randomNum]
 	}
@@ -151,7 +151,7 @@ class Winner {
 
 	draw() {
 		if(game.level === 1) {
-			ctx.fillStyle = 'rgb(255, 0, 0 , 0.5)'
+			ctx.fillStyle = newPlayer.fillStyle
 			ctx.fillRect(this.xCord, this.yCord, this.width, this.height)
 		}
 	}
