@@ -1,4 +1,4 @@
-# project-one - BLOK
+# Project One - BLOK
 General Assembly SEI Project 1
 
 ## About BLOK?
