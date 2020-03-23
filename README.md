@@ -1,19 +1,6 @@
 # project-one - BLOK
 General Assembly SEI Project 1
 
-<!-- 
-- what is project
-- why make project?
-
-- wire frames
-- user stories
-
-- tech used -- HTML CSS JS
-- approaches taken - canvas
-- installation instructions?
-- unsolved problems
-- forthcoming features
- -->
 ## About BLOK?
 BLOK is a one level platformer game. Our user avoids the blocks and tries to make it to it's partner block on the other side.
 
@@ -35,15 +22,25 @@ This is the first project for GA SEI Feb 2020 Cohort.
 * Clicking reset allows the user to reset all their stats.
 * If the user reaches their pair square they they are presented with the win screen which displays their score and gives them the option to reset the game or view the credits. They can also moves around on the screen as much as they want after winning.
 
-## Tech Used
+## How BLOK Was Made
 
-* HTML
-* CSS
-* JavaScript
+BLOK was made using HTML, CSS, and JavaScript. 
 
-## Approaches Taken
+It was created by heavily using the HTML element Canvas.
 
+## Installation Instructions
 
+BLOK can be played just by using the Internet - no installation needed :)
+
+## Unsolved Problems
+
+* Square flashes when crouched for too long
+
+## Forthcoming Features
+
+* Multiple levels
+* The ability to jump on platforms
+* Side-scrolling
 
 
 
