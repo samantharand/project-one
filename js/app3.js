@@ -25,7 +25,7 @@ let deadRequestID;
 
 // CLASSES
 class Player {
-	constructor(xCord, yCord) {
+	constructor(xCord, yCord, fillStyle) {
 		this.height = 20
 		this.width = 20
 		this.xCord = xCord
@@ -44,11 +44,16 @@ class Player {
 		this.jumping = false
 		this.grounded = false
 		this.collision = false
+		let color = ["red", "blue", 'yellow']
+		let randomNum = Math.floor(Math.random() * 3)
+		this.fillStyle = color[randomNum]
 	}
 
 	draw() {
 		if(game.level === 1) {
-			ctx.fillStyle = 'rgb(255, 0, 0 , 0.5)'
+			// let color = ["red", "blue", 'yellow']
+			// let randomNum = Math.floor(Math.random() * 3)
+			ctx.fillStyle = this.fillStyle
 			ctx.fillRect(this.xCord, this.yCord, this.width, this.height)
 		}
 	}
